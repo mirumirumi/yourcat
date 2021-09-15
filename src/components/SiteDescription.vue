@@ -1,7 +1,7 @@
 <template>
   <div class="site-description">
     <div class="title">
-      <h2>Publish Your 🐾 for the World</h2>
+      <h2>Publish YourCat🐾 for the World</h2>
     </div>
     <div class="content"></div>
   </div>

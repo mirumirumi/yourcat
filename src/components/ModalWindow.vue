@@ -128,20 +128,13 @@ export default {
         this.$store.commit("changeApiCatStatus", "succeeded");
         console.log(res.data);
 
-        // draw bounding boxes
         drawBoundingBox(res.data.bounding_box, target);
 
         toggleTimelineCurrentClass("is-accepted");
         this.$store.commit("changeIsAccpetedStatus", "start");
-        // this.$store.commit("changeApiSameStatus", "start");
       }).catch((res) =>{
 
       });
-
-      // check API (is-exist-same-image)
-      // setTimeout(() => {
-      //   this.$store.commit("changeApiSameStatus", "succeeded");
-      // }, 7000);
     },
     submit() {
       // validation
@@ -176,9 +169,6 @@ export default {
     },
     getApiCatStatus() {
       return this.$store.state.apiCatStatus;
-    },
-    getApiSameStatus() {
-      return this.$store.state.apiSameStatus;
     },
     getIsAccepted() {
       return this.$store.state.isAcceptedStatus;

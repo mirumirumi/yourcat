@@ -38,7 +38,6 @@ export const store = createStore({
       showAlert: false,
       fileSelected: false,
       apiCatStatus: "",
-      apiSameStatus: "",
       isAcceptedStatus: "",
       submitDisabled: true,
     };
@@ -79,9 +78,6 @@ export const store = createStore({
     changeApiCatStatus(state, status) {
       state.apiCatStatus = status;
     },
-    // changeApiSameStatus(state, status) {
-    //   state.apiSameStatus = status;
-    // },
     changeIsAccpetedStatus(state, status) {
       state.isAcceptedStatus = status;
     },
