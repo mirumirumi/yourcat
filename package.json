@@ -1,0 +1,61 @@
+{
+    "name": "your-cat-vue",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "serve": "vue-cli-service serve",
+        "build": "vue-cli-service build",
+        "lint": "vue-cli-service lint"
+    },
+    "dependencies": {
+        "axios": "^0.21.1",
+        "core-js": "^3.6.5",
+        "vue": "^3.0.0",
+        "vue-axios": "^3.2.5",
+        "vue-router": "^4.0.0-0",
+        "vuex": "^4.0.2",
+        "webpack": "^4.46.0"
+    },
+    "devDependencies": {
+        "@vue/cli-plugin-babel": "~4.5.0",
+        "@vue/cli-plugin-router": "~4.5.0",
+        "@vue/cli-service": "~4.5.0",
+        "@vue/compiler-sfc": "^3.0.0",
+        "node-sass": "^6.0.1",
+        "prettier": "^2.2.1",
+        "sass": "^1.37.5",
+        "sass-loader": "^10.2.0"
+    },
+    "eslintConfig": {
+        "root": true,
+        "env": {
+            "node": true
+        },
+        "extends": [
+            "plugin:vue/vue3-essential",
+            "eslint:recommended",
+            "@vue/prettier"
+        ],
+        "parserOptions": {
+            "parser": "babel-eslint"
+        },
+        "rules": {
+            "indent": [
+                4,
+                "space"
+            ],
+            "vue/no-multiple-template-root": "off",
+            "vue/html-closing-bracket-newline": [
+                0,
+                {
+                    "multiline": "never"
+                }
+            ]
+        }
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not dead"
+    ]
+}
