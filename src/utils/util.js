@@ -6,3 +6,9 @@ export function toggleTimelineCurrentClass(newItem) {
   }
   document.getElementsByClassName(newItem)[0].classList.add("current");
 }
+
+export function delay(n) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, n);
+  });
+}

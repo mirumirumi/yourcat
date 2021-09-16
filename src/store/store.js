@@ -33,12 +33,13 @@ export const store = createStore({
         "/whar-is-blogger-doing.png",
       ],
       isModalOpen: false,
-      noFile: true,
-      overLimit: false,
-      showAlert: false,
-      fileSelected: false,
-      apiCatStatus: "",
+      isNotExistFile: true,
+      isOverLimit: false,
+      isShownAlert: false,
+      isFileSelected: false,
+      isGoTooltip: false,
       isAcceptedStatus: "",
+      apiCatStatus: "",
       submitDisabled: true,
     };
   },
@@ -48,32 +49,23 @@ export const store = createStore({
     },
   },
   mutations: {
-    toggleIsModalOpen(state) {
-      state.isModalOpen = !state.isModalOpen;
-    },
     sortNewRandomOrder(state) {
       state.filepath_array = shuffle(state.filepath_array);
     },
-    trueNoFile(state) {
-      state.noFile = true;
+    changeIsModalOpen(state, bool) {
+      state.isModalOpen = bool;
     },
-    falseNoFile(state) {
-      state.noFile = false;
+    changeIsNotExistFile(state, bool) {
+      state.isNotExistFile = bool;
     },
-    trueOverLimit(state) {
-      state.overLimit = true;
+    changeIsOverLimit(state, bool) {
+      state.isOverLimit = bool;
     },
-    falseOverLimit(state) {
-      state.overLimit = false;
+    changeIsShownAlert(state, bool) {
+      state.isShownAlert = bool;
     },
-    trueShowAlert(state) {
-      state.showAlert = true;
-    },
-    falseShowAlert(state) {
-      state.showAlert = false;
-    },
-    changeFileSelected(state, bool) {
-      state.fileSelected = bool;
+    changeIsFileSelected(state, bool) {
+      state.isFileSelected = bool;
     },
     changeApiCatStatus(state, status) {
       state.apiCatStatus = status;
@@ -83,6 +75,9 @@ export const store = createStore({
     },
     changeSubmitDisabled(state, bool) {
       state.submitDisabled = bool;
+    },
+    changeIsGoTooltip(state, bool) {
+      state.isGoTooltip = bool;
     },
   },
   actions: {},

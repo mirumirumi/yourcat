@@ -1,24 +1,18 @@
-import {toggleTimelineCurrentClass} from "@/utils/util.js"
-
 export default {
   methods: {
     todoCloseModal() {
-      this.$store.commit("toggleIsModalOpen");
-      this.$store.commit("falseOverLimit");
+      this.$store.commit("changeIsModalOpen", false);
+      this.$store.commit("changeIsOverLimit", false);
       document.getElementById("img").value = "";
       setTimeout(() => {
         // img file
-        this.$store.commit("trueNoFile");
-        this.$store.commit("falseShowAlert");
+        this.$store.commit("changeIsNotExistFile", true);
+        this.$store.commit("changeIsShownAlert", false);
         const img = document.getElementById("preview-image");
         if (img) img.remove();
 
-        // progress
-        this.$store.commit("changeFileSelected", false);
-        this.$store.commit("changeApiCatStatus", "");
-        this.$store.commit("changeApiSameStatus", "");
-        this.$store.commit("changeSubmitDisabled", true);
-        toggleTimelineCurrentClass("is-selected-a-photo");
+        // mixin in ModalWindow.vue, no import
+        this.todoFileChanged();
       }, 100);
     }
   }

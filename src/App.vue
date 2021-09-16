@@ -114,15 +114,6 @@ h2 {
 .popup-delay-enter-from {
   transform: scale(0);
 }
-.popup-2-delay-enter-to {
-  transform: scale(1);
-}
-.popup-2-delay-enter-active {
-  transition: all 0.23s cubic-bezier(.87,.48,0,1.47) 0.5s;
-}
-.popup-2-delay-enter-from {
-  transform: scale(0);
-}
 .baguetteBox-button {
   background-color: transparent;
 }

@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     showUploadForm() {
-      this.$store.commit("toggleIsModalOpen");
+      this.$store.commit("changeIsModalOpen", true);
     },
     sortNewRandomOrder() {
       this.$store.commit("sortNewRandomOrder");
