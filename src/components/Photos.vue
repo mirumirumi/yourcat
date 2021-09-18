@@ -33,8 +33,8 @@ export default {
       const result = [];
       for (const imgData of imgDataArray) {
         result.push({
-          "url": imgData,
-          "title": getFileName(imgData),
+          url: imgData,
+          title: getFileName(imgData),
         });
       }
       return result;

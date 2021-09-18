@@ -20,7 +20,7 @@
           </tooltip>
         </label>
       </div>
-      <input @change="onFileSelect()" ref="fileInput" id="img" type="file" accept="image/jpeg, image/png, image/bmp, image/gif" style="display: none;">
+      <input @change="onFileSelect()" ref="fileInput" id="img" type="file" accept="image/jpeg, image/png, image/gif" style="display: none;">
     </div>
     <div class="progress-wrap">
       <div class="items">
@@ -49,7 +49,7 @@
     </transition>
     <div class="btn-wrap">
       <button id="submit" @click="onClickSubmit()" :disabled="getSubmitDisabled">
-        <load-spinner v-if="isSubmitting" :color="'#ffffff'" :strokeWidth="5" style="flex-grow: 1;"></load-spinner>
+        <load-spinner v-if="getIsSubmitting" :color="'#ffffff'" :strokeWidth="5" style="flex-grow: 1;"></load-spinner>
         <span v-else style="flex-grow: 1;">Submit !</span>
       </button>
       <button id="cancel" @click="cancel()">Cancel</button>
@@ -85,8 +85,7 @@ export default {
   data() {
     return {
       isCheckedAcceptData: false,
-      isGo: false,
-      isSubmitting: false,
+      imgB64: "",
     };
   },
   methods: {
@@ -97,6 +96,7 @@ export default {
       // delete previous preview thumb
       const img = document.getElementById("preview-image");
       const file = this.$refs.fileInput.files[0];
+      this.imgB64 = "";
       if (img) img.remove();
       if (!file) {
         this.$store.commit("changeIsNotExistFile", true);
@@ -114,7 +114,7 @@ export default {
 
       // preview thumb
       const target = this.$refs.preview;
-      const imgB64 = await makePreviewFile(file, target);
+      this.imgB64 = await makePreviewFile(file, target);
 
       // trigger file selected
       this.$store.commit("changeIsFileSelected", true);
@@ -125,7 +125,7 @@ export default {
       // check API (is-the-cat)
       this.axios.post(
         "https://kkqe8obe2i.execute-api.ap-northeast-1.amazonaws.com/yourcat-dev-apis/is-the-cat", {
-          img: imgB64,
+          img: this.imgB64,
         }, {
           headers: {
             "x-api-key": apiKey,
@@ -168,12 +168,12 @@ export default {
       }
 
       // spinner
-      this.isSubmitting = true;
+      this.$store.commit("changeIsSubmitting", true);
 
       // submit
       this.axios.post(
         "https://kkqe8obe2i.execute-api.ap-northeast-1.amazonaws.com/yourcat-dev-apis/post-image", {
-          img: imgB64,
+          img: this.imgB64,
         }, {
           headers: {
             "x-api-key": apiKey,
@@ -194,7 +194,7 @@ export default {
       });
 
       // modal on
-      
+
 
     },
     cancel() {
@@ -234,6 +234,9 @@ export default {
     },
     getIsGoTooltip() {
       return this.$store.state.isGoTooltip;
+    },
+    getIsSubmitting() {
+      return this.$store.state.isSubmitting;
     },
   },
   components: {
@@ -279,13 +282,13 @@ async function makePreviewFile(file, target) {
   }
 }
 
-function encodeImgToBase64(img, mimeType) {
+function encodeImgToBase64(img) {
   const canvas = document.createElement("canvas");
   canvas.width  = img.width;
   canvas.height = img.height;
   const ctx = canvas.getContext("2d");
   ctx.drawImage(img, 0, 0);
-  return canvas.toDataURL(mimeType);
+  return canvas.toDataURL("image/jpeg");
 }
 
 function drawBoundingBox(boundingBoxArray, target) {

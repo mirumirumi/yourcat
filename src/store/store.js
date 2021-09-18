@@ -39,6 +39,7 @@ export const store = createStore({
       isFileSelected: false,
       isGoTooltip: false,
       isAcceptedStatus: "",
+      isSubmitting: false,
       apiCatStatus: "",
       submitDisabled: true,
     };
@@ -78,6 +79,9 @@ export const store = createStore({
     },
     changeIsGoTooltip(state, bool) {
       state.isGoTooltip = bool;
+    },
+    changeIsSubmitting(state, bool) {
+      state.isSubmitting = bool;
     },
   },
   actions: {},
