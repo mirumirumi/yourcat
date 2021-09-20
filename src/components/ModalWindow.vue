@@ -64,8 +64,10 @@ import LoadSpinner from "@/components/LoadSpinner.vue";
 import Tooltip from "@/components/Tooltip.vue";
 import ModalClose from "@/mixin/modal-close.js";
 import StateReset from "@/mixin/state-reset.js";
-import { toggleTimelineCurrentClass } from "@/utils/util.js"
-import { delay } from "@/utils/util.js"
+import { toggleTimelineCurrentClass } from "@/utils/util.js";
+import { delay } from "@/utils/util.js";
+import { removeExif } from "@/utils/util.js";
+import { getImageFileType } from "@/utils/util.js";
 import { apiKey } from "@/utils/secret.js";
 const timeToDrawCheckmark = 1333;
 export default {
@@ -112,9 +114,18 @@ export default {
       this.$store.commit("changeIsOverLimit", false);
       this.$store.commit("changeIsNotExistFile", false);
 
-      // preview thumb
+      // remove EXIF data
+      const imageType = await getImageFileType(file);
+      let blob;
+      if (imageType === "JPG") {
+        blob = await removeExif(file);
+      } else {
+        blob = file;  // for arg1 of makePreviewFile()
+      }
+
+      // preview thumb & get base64
       const target = this.$refs.preview;
-      this.imgB64 = await makePreviewFile(file, target);
+      this.imgB64 = await makePreviewFile(blob, target);
 
       // trigger file selected
       this.$store.commit("changeIsFileSelected", true);

@@ -6,9 +6,11 @@
 
 <script>
 import ModalClose from "@/mixin/modal-close.js";
+import StateReset from "@/mixin/state-reset.js";
 export default {
   mixins: [
     ModalClose,
+    StateReset,
   ],
   methods: {
     cancel() {
