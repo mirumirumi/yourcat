@@ -1,4 +1,3 @@
-
 export function toggleTimelineCurrentClass(newItem) {
   const classes = document.getElementsByClassName("progress")
   for (let c of classes) {
@@ -47,7 +46,11 @@ export function removeExif(file) {
           newPieces.push(fr.result.slice(recess));
           let br = new Blob(newPieces, { type: "image/jpeg" });
           resolve(br);
+        } else {
+          resolve(file);
         }
+      } else {
+        // non JPG?
       }
     };
   });
