@@ -143,7 +143,7 @@ export default {
           }
         },
       ).then(async (res) => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data.cat.judge) {  // cat!
           this.$store.commit("changeApiCatStatus", "succeeded");
           drawBoundingBox(res.data.cat.bounding_box, target);
@@ -191,17 +191,18 @@ export default {
           }
         },
       ).then(async (res) => {
-        console.log(res.data);
-        if (1) {
-          
-        } else if (1) {
-          
-        } else {
-          
-        }
+        // console.log(res.data);
+        // spinner
+        this.$store.commit("changeIsSubmitting", false);
+
+        const uuid_regexp = new RegExp(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}(\..*)$/, "gmi");
       }).catch(async (error) => {
         console.log(error);
+        // spinner
+        this.$store.commit("changeIsSubmitting", false);
 
+
+        return;
       });
 
       // modal on

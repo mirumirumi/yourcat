@@ -60,7 +60,7 @@ div.tooltip {
   background-color: #444444;
   opacity: 0.9;
   transform: translateX(50%) scale(0);
-  transition: all 0.05s cubic-bezier(.69,1.1,.54,1.17) 0.333s;
+  transition: all 0.05s cubic-bezier(.69,1.1,.54,1.17) 0.13s;
   &.hover {
     transform: scale(0);
     transition: none;
