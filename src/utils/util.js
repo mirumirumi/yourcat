@@ -6,9 +6,13 @@ export function toggleTimelineCurrentClass(newItem) {
   document.getElementsByClassName(newItem)[0].classList.add("current");
 }
 
-export function delay(n) {
+export function delay(n, m = null) {
+  let sec = n;
+  if (m !== null) {
+    sec = Math.floor(Math.random() * (m - n + 1) + n);
+  }
   return new Promise((resolve) => {
-    setTimeout(resolve, n);
+    setTimeout(resolve, sec);
   });
 }
 

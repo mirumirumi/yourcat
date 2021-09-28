@@ -51,6 +51,11 @@
       <button id="submit" @click="onClickSubmit()" :disabled="getSubmitDisabled">
         <load-spinner v-if="getIsSubmitting" :color="'#ffffff'" :strokeWidth="5" style="flex-grow: 1;"></load-spinner>
         <span v-else style="flex-grow: 1;">Submit !</span>
+        <transition name="tooltip">
+          <tooltip v-if="getIsErrorSubmit" :color="'error'" style="width: 235px; bottom: 51px; transform: translateX(50%) scale(1.3);">
+            Something went wrong. Please retry again.
+          </tooltip>
+        </transition>
       </button>
       <button id="cancel" @click="cancel()">Cancel</button>
     </div>
@@ -169,43 +174,64 @@ export default {
     // when api result is failure
     async APIFailed(result) {
       this.$store.commit("changeApiCatStatus", result);
-      await delay(555);
+      await delay(444);
       this.$store.commit("changeIsGoTooltip", true);
     },
-    onClickSubmit() {
+    async onClickSubmit() {
+      // off submit error
+      this.$store.commit("changeIsErrorSubmit", false);
+
       // validation
       if (!this.isCheckedAcceptData) {
         this.$store.commit("changeIsShownAlert", true);
+        return;
       }
 
       // spinner
       this.$store.commit("changeIsSubmitting", true);
 
       // submit
-      this.axios.post(
-        "https://kkqe8obe2i.execute-api.ap-northeast-1.amazonaws.com/yourcat-dev-apis/post-image", {
-          img: this.imgB64,
-        }, {
-          headers: {
-            "x-api-key": apiKey,
-          }
-        },
-      ).then(async (res) => {
-        // console.log(res.data);
+      try {
+        await this.axios.post(
+          "https://kkqe8obe2i.execute-api.ap-northeast-1.amazonaws.com/yourcat-dev-apis/post-image", {
+            img: this.imgB64,
+          }, {
+            headers: {
+              "x-api-key": apiKey,
+            }
+          },
+        );
+      } catch (e) {
+        console.log(e);
+        await delay(1111, 1777);
         // spinner
         this.$store.commit("changeIsSubmitting", false);
-
-        const uuid_regexp = new RegExp(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}(\..*)$/, "gmi");
-      }).catch(async (error) => {
-        console.log(error);
-        // spinner
-        this.$store.commit("changeIsSubmitting", false);
-
-
+        // error notify
+        this.$store.commit("changeIsErrorSubmit", true);
         return;
-      });
+      }
 
-      // modal on
+      await delay(1111, 1777);
+
+      // spinner
+      this.$store.commit("changeIsSubmitting", false);
+
+      // close modal
+      const modal = document.getElementsByClassName("modal-wrap")[0];
+      modal.style.transform = "translate(-50%, -50%) scale(1)";
+      modal.style.transition = "all 0.1s cubic-bezier(.14,1.1,.9,.97)";
+      modal.style.transform = "translate(-50%, -50%) scale(0)";
+      await delay(333);
+      this.todoCloseModal();
+      await delay(333);
+      modal.style.transform = null;
+      modal.style.transition = null;
+
+      // loading
+
+
+
+      // show balloon
 
 
     },
@@ -250,6 +276,9 @@ export default {
     getIsSubmitting() {
       return this.$store.state.isSubmitting;
     },
+    getIsErrorSubmit() {
+      return this.$store.state.isErrorSubmit;
+    },    
   },
   components: {
     AlertBox,
@@ -407,7 +436,7 @@ div#preview-wrap {
       }
       .tooltip {
         transform: scale(1);
-        transition: all 0.05s cubic-bezier(.69,1.1,.54,1.17) 0.7s;
+        transition: all 0.05s cubic-bezier(.69,1.1,.54,1.17) 0.5s;
       }
     }
   }
@@ -528,6 +557,7 @@ div#preview-wrap {
     transition: 0.13s all ease-in-out;
   }
   #submit {
+    position: relative;
     display: inline-flex;
     align-items: center;
     color: #ffffff;

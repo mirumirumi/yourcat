@@ -26,6 +26,9 @@ export default {
       
       // submit spinner
       this.$store.commit("changeIsSubmitting", false);
+
+      // submit error
+      this.$store.commit("changeIsErrorSubmit", false);
     },
   }
 }

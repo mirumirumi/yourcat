@@ -7,7 +7,6 @@
 </template>
 
 <script>
-import { delay } from "@/utils/util.js"
 export default {
   props: {
     type: {
@@ -50,7 +49,7 @@ div.tooltip {
   display: flex;
   justify-content: center;
   align-items: center;
-  bottom: 35px;
+  bottom: 40px;
   right: 50%;
   width: 133px;
   height: 21px;
@@ -71,7 +70,7 @@ div.tooltip {
       border-top: solid 5.5px #f17978;
     }
     &.popup {
-      transform: translateX(50%) scale(1.2);
+      transform: translateX(50%) scale(1.3);
     }
   }
   span {

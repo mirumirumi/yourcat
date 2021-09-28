@@ -3,35 +3,7 @@ import {createStore} from "vuex";
 export const store = createStore({
   state() {
     return {
-      filepath_array: [
-        "/a-short-hike-main-visual.jpg",
-        "/a-short-hike-screenshot.jpg",
-        "/google-adosensu-auto-insert-function-by-milmemo.png",
-        "/how-to-Monetize-by-the-blog.jpg",
-        "/how-to-Monetize-by-the-blog.png",
-        "/how-to-start-blog.png",
-        "/it-takes-two-main-visual.jpg",
-        "/it-takes-two-screenshot.jpg",
-        "/karabiner-elements.jpg",
-        "/karabiner-elements.png",
-        "/mansion-renchin.jpg",
-        "/milmemo-8vivid.png",
-        "/milmemo-8vivid-suki.jpg",
-        "/mobile-ad-block.png",
-        "/my-cat-Lady.JPG",
-        "/my-cats.JPG",
-        "/oneshot-main-visual.png",
-        "/oneshot-screenshot.jpg",
-        "/power-automate-desktop-screenshot.jpg",
-        "/programming-code-thumbnail.jpg",
-        "/programming-code-thumbnail.png",
-        "/RiME-main-visual.jpg",
-        "/software-design-2021-5.JPG",
-        "/undertale-mainpng.png",
-        "/undertale-screenshot.jpg",
-        "/video-game-package-and-download.jpg",
-        "/whar-is-blogger-doing.png",
-      ],
+      filepathArray: [],
       isModalOpen: false,
       isNotExistFile: true,
       isOverLimit: false,
@@ -40,18 +12,19 @@ export const store = createStore({
       isGoTooltip: false,
       isAcceptedStatus: "",
       isSubmitting: false,
+      isErrorSubmit: false,
       apiCatStatus: "",
       submitDisabled: true,
     };
   },
   getters: {
     sortOnceRandomOrder(state) {
-      return shuffle(state.filepath_array);
+      return shuffle(state.filepathArray);
     },
   },
   mutations: {
     sortNewRandomOrder(state) {
-      state.filepath_array = shuffle(state.filepath_array);
+      state.filepathArray = shuffle(state.filepathArray);
     },
     changeIsModalOpen(state, bool) {
       state.isModalOpen = bool;
@@ -82,6 +55,9 @@ export const store = createStore({
     },
     changeIsSubmitting(state, bool) {
       state.isSubmitting = bool;
+    },
+    changeIsErrorSubmit(state, bool) {
+      state.isErrorSubmit = bool;
     },
   },
   actions: {},

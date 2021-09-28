@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import axios from "axios";
+import { apiKey } from "@/utils/secret.js";
 export default {
   created() {
 
@@ -28,22 +30,56 @@ export default {
     },
   },
   computed: {
-    getImgDataArray() {
+    async getImgDataArray() { 
+  // return new Promise(async (resolve) => {
+      this.$store.state.filepathArray = await getImages();
       const imgDataArray = this.$store.getters.sortOnceRandomOrder;
       const result = [];
       for (const imgData of imgDataArray) {
         result.push({
-          url: imgData,
-          title: getFileName(imgData),
+          url: makeS3Url(imgData),
+          title: getFileName(imgData),  // -> makeFileName()
         });
       }
+      // resolve(result);
       return result;
+  // });
     },
   },
   components: {
 
   }
 };
+
+function getImages() {
+  return new Promise(async (resolve) => {
+    let result = [];
+    try {
+      const res = await axios.get(
+        "https://kkqe8obe2i.execute-api.ap-northeast-1.amazonaws.com/yourcat-dev-apis/get-image", {
+          headers: {
+            "x-api-key": apiKey,
+          }
+        },
+      );
+      result = res.data;
+    } catch (e) {
+      console.log(e);
+  
+
+
+
+
+
+      return;
+    }
+    resolve(result);
+  });
+}
+
+function makeS3Url(idArray) {
+  return "https://yourcat-dev-image.s3.ap-northeast-1.amazonaws.com/" + idArray + ".jpg";
+}
 
 function getFileName(path) {
   return path.replace(/.*\/(.*?)\..*$/gmi, "$1");

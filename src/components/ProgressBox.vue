@@ -18,13 +18,13 @@
         <line class="path line" fill="none" stroke="#e96e6e" stroke-width="10" stroke-linecap="round" stroke-miterlimit="10" x1="65.1" y1="37" x2="65.1" y2="75" data-v-94ed5144=""></line>
         <line class="path line" fill="none" stroke="#e96e6e" stroke-width="10" stroke-linecap="round" stroke-miterlimit="10" x1="65.1" y1="92" x2="65.1" y2="94" data-v-94ed5144=""></line>
         </svg>
-        <tooltip v-if="getJudgeResult === 'dog'" :color="'error'" :line="2" style="width: 195px;" key="dog">
+        <tooltip v-if="getJudgeResult === 'dog'" :color="'error'" :line="2" style="width: 195px;">
           This is a Wanko🐶 !&nbsp;&nbsp;&nbsp;It's cute,<br>but I'm sorry, We can't approve it...
         </tooltip>
-        <tooltip v-else-if="getJudgeResult === 'none'" :color="'error'" style="width: 245px" key="none">
+        <tooltip v-if="getJudgeResult === 'none'" :color="'error'" style="width: 245px">
           There doesn't seem to be a cat in this photo 🤔
         </tooltip>
-        <tooltip v-else-if="getJudgeResult === 'error'" :color="'error'" style="width: 235px" key="error">
+        <tooltip v-if="getJudgeResult === 'error'" :color="'error'" style="width: 235px">
           Something went wrong. Please retry again.
         </tooltip>
       </div>

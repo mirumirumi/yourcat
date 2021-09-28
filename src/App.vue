@@ -96,23 +96,41 @@ h2 {
 .fade-leave-to {
   opacity: 0;
 }
-.popup-enter-to {
-  transform: scale(1);
+.popup-enter-from {
+  transform: scale(0);
+}
+.fade-shuin-enter-from {
+  opacity: 0;
+}
+.fade-shuin-enter-active {
+  transition: all 0.2s ease-out;
+}
+.fade-shuin-enter-to {
+  opacity: 1;
 }
 .popup-enter-active {
   transition: all 0.13s cubic-bezier(.31,1.15,0,1.27);
 }
-.popup-enter-from {
-  transform: scale(0);
-}
-.popup-delay-enter-to {
+.popup-enter-to {
   transform: scale(1);
+}
+.popup-delay-enter-from {
+  transform: scale(0);
 }
 .popup-delay-enter-active {
   transition: all 0.13s cubic-bezier(.31,1.15,0,1.27) 0.3s;
 }
-.popup-delay-enter-from {
-  transform: scale(0);
+.popup-delay-enter-to {
+  transform: scale(1);
+}
+.tooltip-enter-from {
+  transform: translateX(50%) scale(0) !important;
+}
+.tooltip-enter-active {
+  transition: all 0.13s cubic-bezier(.31,1.15,0,1.27) !important;
+}
+.tooltip-enter-to {
+  transform: translateX(50%) scale(1.3) !important;
 }
 .baguetteBox-button {
   background-color: transparent;
