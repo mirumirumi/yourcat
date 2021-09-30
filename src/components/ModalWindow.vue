@@ -140,7 +140,7 @@ export default {
 
       // check API (is-the-cat)
       this.axios.post(
-        "https://kkqe8obe2i.execute-api.ap-northeast-1.amazonaws.com/yourcat-dev-apis/is-the-cat", {
+        process.env.VUE_APP_API_ENDPOINT + "is-the-cat", {
           img: this.imgB64,
         }, {
           headers: {
@@ -193,7 +193,7 @@ export default {
       // submit
       try {
         await this.axios.post(
-          "https://kkqe8obe2i.execute-api.ap-northeast-1.amazonaws.com/yourcat-dev-apis/post-image", {
+          process.env.VUE_APP_API_ENDPOINT + "post-image", {
             img: this.imgB64,
           }, {
             headers: {
@@ -211,7 +211,7 @@ export default {
         return;
       }
 
-      await delay(1111, 1777);
+      await delay(999, 1333);
 
       // spinner
       this.$store.commit("changeIsSubmitting", false);
@@ -321,15 +321,6 @@ async function makePreviewFile(file, target) {
       }
     });
   }
-}
-
-function encodeImgToBase64(img) {
-  const canvas = document.createElement("canvas");
-  canvas.width  = img.width;
-  canvas.height = img.height;
-  const ctx = canvas.getContext("2d");
-  ctx.drawImage(img, 0, 0);
-  return canvas.toDataURL("image/jpeg");
 }
 
 function drawBoundingBox(boundingBoxArray, target) {
