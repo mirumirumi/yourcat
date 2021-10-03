@@ -1,9 +1,7 @@
 <template>
   <div id="photos-wrap">
-    <div class="photo" v-for="imgData in imgDataArray" :key="imgData">
-      <!-- <a :href="imgData.url" class="spotlight"> -->
-        <img :src="imgData.url" :alt="imgData.title" crossorigin="Anonymous" />
-      <!-- </a> -->
+    <div class="photo" v-for="imgData, index in imgDataArray" :key="imgData">
+      <img :src="imgData.url" :alt="imgData.title" @click="onClickPhoto(index)" crossorigin="Anonymous"/>
       <div class="download">
         <button @click="onClickDownload(imgData.url)">
           <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
@@ -19,28 +17,38 @@
 
 <script>
 import axios from "axios";
-import { apiKey } from "@/utils/secret.js";
 import Spotlight from "spotlight.js/src/js/spotlight.js";
-// import baguetteBox from "baguettebox.js";
+import { apiKey } from "@/utils/secret.js";
 export default {
   data() {
     return {
       imgDataArray: [],
+      gallery: [],
       index: null,
     };
   },
   created() {
     this.getImgDataArray();
   },
-  mounted() {
-// window.addEventListener("load", () => {
-//   baguetteBox.run("#photos-wrap", {
-//     "captions": false,
-//     "overlayBackgroundColor": "rgb(36,33,32,0.87)",
-//   });
-// });
-  },
   methods: {
+    onClickPhoto(index) {
+      // https://github.com/nextapps-de/spotlight
+      Spotlight.show(this.gallery, {
+        index: index + 1,
+        animation: "slide, fade",
+        control: "play, zoom, close",
+        title: false,
+        play: 3,  // bug (http://github.com/nextapps-de/spotlight/issues/49)
+        onshow: (index) => {
+          Spotlight.addControl("download-button", (event) => {
+            execDownload(this.gallery[index - 1].src);
+          });
+        },
+        onclose: () => {
+          Spotlight.removeControl("download-button");
+        },
+      });
+    },
     onClickDownload(url) {
       execDownload(url);
     },
@@ -58,12 +66,12 @@ export default {
           url: makeS3Url(imgData),
           title: makeFileName(imgData),
         });
+        this.gallery.push({
+          src: makeS3Url(imgData),
+        });
       }
     },
   },
-  components: {
-
-  }
 };
 
 function getImages() {
@@ -129,13 +137,10 @@ function encodeImgToBase64(img) {
 }
 .photo {
   position: relative;
-  // margin-bottom: 2.3%;
   margin-bottom: 1.3%;
-  a {
+  cursor: pointer;
+  &:hover > div{
     display: block;
-    &:hover + div{
-      display: block;
-    }
   }
 }
 img {
@@ -173,6 +178,19 @@ img {
       }
     }
   }
+}
+</style>
+<style lang="scss" >
+#spotlight {
+  background-color: #1f1a17f2 !important;
+}
+.spl-fullscreen {
+  display: none !important;
+}
+.spl-download-button{
+  background-size: 17.5px !important;
+  padding-top: 1.777px;
+  background-image: url("data:image/svg+xml;base64,  PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNTEyIDUxMjsiIHhtbDpzcGFjZT0icHJlc2VydmUiIGZpbGw9IiNmZmZmZmYiPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik0zODIuNTYsMjMzLjM3NkMzNzkuOTY4LDIyNy42NDgsMzc0LjI3MiwyMjQsMzY4LDIyNGgtNjRWMTZjMC04LjgzMi03LjE2OC0xNi0xNi0xNmgtNjRjLTguODMyLDAtMTYsNy4xNjgtMTYsMTZ2MjA4aC02NA0KCQkJYy02LjI3MiwwLTExLjk2OCwzLjY4LTE0LjU2LDkuMzc2Yy0yLjYyNCw1LjcyOC0xLjYsMTIuNDE2LDIuNTI4LDE3LjE1MmwxMTIsMTI4YzMuMDQsMy40ODgsNy40MjQsNS40NzIsMTIuMDMyLDUuNDcyDQoJCQljNC42MDgsMCw4Ljk5Mi0yLjAxNiwxMi4wMzItNS40NzJsMTEyLTEyOEMzODQuMTkyLDI0NS44MjQsMzg1LjE1MiwyMzkuMTA0LDM4Mi41NiwyMzMuMzc2eiIvPg0KCTwvZz4NCjwvZz4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNNDMyLDM1MnY5Nkg4MHYtOTZIMTZ2MTI4YzAsMTcuNjk2LDE0LjMzNiwzMiwzMiwzMmg0MTZjMTcuNjk2LDAsMzItMTQuMzA0LDMyLTMyVjM1Mkg0MzJ6Ii8+DQoJPC9nPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPC9zdmc+DQo=");
 }
 </style>
 

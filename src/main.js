@@ -4,9 +4,7 @@ import router from "./router";
 import { store } from "./store/store.js";
 import axios from "axios";
 import VueAxios from "vue-axios";
-
-// axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
-// axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+import "spotlight.js/dist/css/spotlight.min.css";
 
 createApp(App)
   .use(router)

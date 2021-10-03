@@ -68,12 +68,13 @@ export default {
 
 <style lang="scss">
 body {
+  margin: 0;
   background-color: #fffcf9;
   // font-size: 18px;
 }
 #app {
   margin: auto;
-  padding: 0 10px 50px 10px;
+  padding: 3px 13px 50px 13px;
   max-width: 1225px;
   color: #52514f;
   font-family: Helvetica, Arial, sans-serif;
@@ -171,8 +172,6 @@ h1 {
 h1 a {
   text-decoration: none;
 }
-#nav {
-}
 #nav a {
   margin-right: 2.3em;
   color: #bbbbba;
@@ -199,7 +198,4 @@ h1 a {
   opacity: 1 !important;
   pointer-events: auto !important;
 }
-
-
-
 </style>

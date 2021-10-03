@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <link rel="icon" href="<%= BASE_URL %>main-icon-maru.png" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.css" integrity="sha512-NVt7pmp5f+3eWRPO1h4A1gCf4opn4r5z2wS1mi7AaVcTzE9wDJ6RzMqSygjDzYHLp+mAJ2/qzXXDHar6IQwddQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>YourCat | Photo Sharing for All Cat Persons</title>
   </head>
   <body>
@@ -13,25 +12,5 @@
       <strong>We're sorry but doesn't work properly without JavaScript enabled.Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.js" integrity="sha512-7KzSt4AJ9bLchXCRllnyYUDjfhO2IFEWSa+a5/3kPGQbr+swRTorHQfyADAhSlVHCs1bpFdB1447ZRzFyiiXsg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
-      window.addEventListener('load', function() {
-        // https://github.com/feimosi/baguetteBox.js
-        baguetteBox.run("#photos-wrap", {
-          // "buttons": false,
-          "captions": false,
-          "overlayBackgroundColor": "rgb(36,33,32,0.87)",
-        });
-
-        // // reCAPTCHA
-        // const recaptchaScript = document.createElement('script');
-        // recaptchaScript.setAttribute('src', 'https://www.google.com/recaptcha/api.js');
-        // document.head.appendChild(recaptchaScript);
-        // <div class="g-recaptcha"
-        //   data-sitekey="6Lev7vobAAAAAMgO2k77iRucWMQetjGyBtzx2J6m"
-        //   data-callback="callbackRecaptcha"
-        //   data-expired-callback="callbackRecaptchaExpired"></div>
-      });
-    </script>
   </body>
 </html>
