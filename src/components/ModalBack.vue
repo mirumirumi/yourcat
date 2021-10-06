@@ -1,7 +1,5 @@
 <template>
-  <div class="overlay" @click="cancel">
-
-  </div>
+  <div class="overlay" @click="cancel"></div>
 </template>
 
 <script>
@@ -36,7 +34,6 @@ export default {
   pointer-events: none;
   transition: all 0.23s ease-in-out;
 }
-
 </style>
 
 

@@ -1,36 +1,77 @@
 <template>
   <div id="photos-wrap">
-    <div class="photo" v-for="imgData, index in imgDataArray" :key="imgData">
-      <img :src="imgData.url" :alt="imgData.title" @click="onClickPhoto(index)" crossorigin="Anonymous"/>
-      <div class="download">
-        <button @click="onClickDownload(imgData.url)">
-          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+    <transition name="fade">
+      <div class="loading-wrap" v-show="isLoading">
+        <skeleton-loading v-for="block in blocks" :height="block.height" :isStopAnimation="isStopAnimation"></skeleton-loading>
+      </div>
+    </transition>
+    <transition name="fade">
+      <div class="photo-wrap" v-show="!isLoading">
+        <div class="photo" v-for="imgData, index in imgDataArray" :key="imgData">
+          <img :src="imgData.url" :alt="imgData.title" @click="onClickPhoto(index)" @load="loaded(index)" crossorigin="Anonymous"/>
+          <div class="download">
+            <button @click="onClickDownload(imgData.url)">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
 	 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
               <path d="M382.56,233.376C379.968,227.648,374.272,224,368,224h-64V16c0-8.832-7.168-16-16-16h-64c-8.832,0-16,7.168-16,16v208h-64 c-6.272,0-11.968,3.68-14.56,9.376c-2.624,5.728-1.6,12.416,2.528,17.152l112,128c3.04,3.488,7.424,5.472,12.032,5.472 c4.608,0,8.992-2.016,12.032-5.472l112-128C384.192,245.824,385.152,239.104,382.56,233.376z"/>
               <path d="M432,352v96H80v-96H16v128c0,17.696,14.336,32,32,32h416c17.696,0,32-14.304,32-32V352H432z"/>
-          </svg>
-        </button>
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+    </transition>
   </div>
+  <transition name="popup">
+    <alert-box v-if="isShowAlert" class="load">
+      Something went wrong. Please reload the page.
+    </alert-box>
+  </transition>
 </template>
 
 <script>
 import axios from "axios";
 import Spotlight from "spotlight.js/src/js/spotlight.js";
+import SkeletonLoading from "@/components/SkeletonLoading.vue";
+import AlertBox from "@/components/AlertBox.vue";
 import { apiKey } from "@/utils/secret.js";
 export default {
   data() {
     return {
       imgDataArray: [],
       gallery: [],
-      index: null,
+      isLoadedImages: [],
+      isLoading: true,
+      isStopAnimation: false,
+      isShowAlert: false,
     };
   },
   created() {
-    this.getImgDataArray();
+    try {
+      this.getImgDataArray();
+    } catch (e) {
+      this.isStopAnimation = true;
+      this.isShowAlert = true;
+      return;
+    }
+  },
+  watch: {
+    isLoadedImages() {
+      if (this.isLoadedImages.length === this.imgDataArray.length) {
+        this.isLoading = false;
+      }
+    },
   },
   methods: {
+    loaded(index) {
+      const removeDuplicateValues = ([...array]) => {
+        return array.filter((value, index, self) => self.indexOf(value) === index);
+      }
+      removeDuplicateValues(this.isLoadedImages);
+
+      // for reactive trigger...
+      this.isLoadedImages = this.isLoadedImages.concat([index]);
+    },
     onClickPhoto(index) {
       // https://github.com/nextapps-de/spotlight
       Spotlight.show(this.gallery, {
@@ -56,10 +97,7 @@ export default {
       try {
         this.$store.state.filepathArray = await getImages();
       } catch (e) {
-
-
-
-        return;
+        throw e;
       }
       for (const imgData of this.$store.getters.sortOnceRandomOrder) {
         this.imgDataArray.push({
@@ -72,6 +110,24 @@ export default {
       }
     },
   },
+  computed: {
+    blocks() {
+      let result = [];
+      [...Array(30)].map(() => {
+        const minHeight = 50;
+        const maxHeight = 250;
+        const height = Math.floor(Math.random() * (minHeight - maxHeight + 1) + maxHeight);
+        result.push({
+          height: height,
+        })
+      });
+      return result;
+    },
+  },
+  components: {
+    SkeletonLoading,
+    AlertBox,
+  }
 };
 
 function getImages() {
@@ -87,7 +143,6 @@ function getImages() {
       );
       result = res.data;
     } catch (e) {
-      console.log(e);
       throw e;
     }
     resolve(result);
@@ -178,6 +233,14 @@ img {
       }
     }
   }
+}
+.load {
+  position: fixed !important;
+  bottom: 3em !important;
+  left: 3em !important;
+  padding: 1.25em 1.7em 1.2em !important;
+  font-size: 1.03em !important;
+  box-shadow: 1px 1px 3px 1px rgb(0 0 0 / 13%) !important;
 }
 </style>
 <style lang="scss" >
