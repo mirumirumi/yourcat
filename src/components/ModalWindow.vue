@@ -330,10 +330,11 @@ function drawBoundingBox(boundingBoxArray, target) {
     boxElem.style.position = "absolute";
     boxElem.style.border = "3.3px dashed rgb(237 128 68 / 77.7%)";
     boxElem.style.borderRadius = "9px";
-    boxElem.style.width = box.width * 100 + "%";
-    boxElem.style.height = box.height * 100 + "%";
-    boxElem.style.left = box.left * 100 + "%";
-    boxElem.style.top = box.top * 100 + "%";
+    // each val that -1% is better than origin...?
+    boxElem.style.width = (box.width * 100 - 1).toString() + "%";
+    boxElem.style.height = (box.height * 100 - 1).toString() + "%";
+    boxElem.style.left = (box.left * 100 - 1).toString() + "%";
+    boxElem.style.top = (box.top * 100 - 1).toString() + "%";
     boxElem.style.zIndex = "2";
     boxElem.style.transform = "scale(0)";
     boxElem.style.transition="0.23s all cubic-bezier(.69,1.1,.54,1.17)";
@@ -407,6 +408,7 @@ div#preview-wrap {
     background-color: rgba(0, 0, 0, 0.3);
     cursor: pointer;
     transition: 0.07s all ease-in-out;
+    z-index: 3;
     svg {
       position: absolute;
       width: 25px;

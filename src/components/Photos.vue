@@ -23,7 +23,7 @@
     </transition>
   </div>
   <transition name="popup">
-    <alert-box v-if="isShowAlert" class="load">
+    <alert-box v-if="isShownAlert" class="load">
       Something went wrong. Please reload the page.
     </alert-box>
   </transition>
@@ -43,15 +43,15 @@ export default {
       isLoadedImages: [],
       isLoading: true,
       isStopAnimation: false,
-      isShowAlert: false,
+      isShownAlert: false,
     };
   },
   created() {
     try {
-      this.getImgDataArray();
+      this.getImages();
     } catch (e) {
       this.isStopAnimation = true;
-      this.isShowAlert = true;
+      this.isShownAlert = true;
       return;
     }
   },
@@ -60,6 +60,12 @@ export default {
       if (this.isLoadedImages.length === this.imgDataArray.length) {
         this.isLoading = false;
       }
+    },
+    newRandom(filepathArray) {
+      this.isLoading = true;
+      this.isLoadedImages = [];  // init
+      this.imgDataArray = [];
+      this.makeImageDataArray(filepathArray);
     },
   },
   methods: {
@@ -93,13 +99,16 @@ export default {
     onClickDownload(url) {
       execDownload(url);
     },
-    async getImgDataArray() { 
+    async getImages() { 
       try {
-        this.$store.state.filepathArray = await getImages();
+        this.$store.state.filepathArray = await getImagesAPI();
       } catch (e) {
         throw e;
       }
-      for (const imgData of this.$store.getters.sortOnceRandomOrder) {
+      this.makeImageDataArray(this.$store.getters.sortOnceRandomOrder);
+    },
+    makeImageDataArray(images) {
+      for (const imgData of images) {
         this.imgDataArray.push({
           url: makeS3Url(imgData),
           title: makeFileName(imgData),
@@ -114,8 +123,8 @@ export default {
     blocks() {
       let result = [];
       [...Array(30)].map(() => {
-        const minHeight = 50;
-        const maxHeight = 250;
+        const minHeight = 100;
+        const maxHeight = 333;
         const height = Math.floor(Math.random() * (minHeight - maxHeight + 1) + maxHeight);
         result.push({
           height: height,
@@ -123,6 +132,9 @@ export default {
       });
       return result;
     },
+    newRandom() {
+      return this.$store.state.filepathArray;
+    }
   },
   components: {
     SkeletonLoading,
@@ -130,7 +142,7 @@ export default {
   }
 };
 
-function getImages() {
+function getImagesAPI() {
   return new Promise(async (resolve) => {
     let result = [];
     try {
