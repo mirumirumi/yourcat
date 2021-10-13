@@ -1,13 +1,27 @@
 <template>
   <div id="photos-wrap">
     <transition name="fade">
-      <div class="loading-wrap" v-show="isLoading">
+      <div class="loading-wrap" v-show="getIsLoadingPhotos">
         <skeleton-loading v-for="block in blocks" :height="block.height" :isStopAnimation="isStopAnimation"></skeleton-loading>
       </div>
     </transition>
     <transition name="fade">
-      <div class="photo-wrap" v-show="!isLoading">
+      <div class="photo-wrap" v-show="!getIsLoadingPhotos">
         <div class="photo" v-for="imgData, index in imgDataArray" :key="imgData">
+          <tooltip v-if="(index == 0) && (getIsCompletedSubmit)" style="
+            top: -2.2em;
+            right: -3.3em;
+            bottom: 0px;
+            width: 400px;
+            height: 50px;
+            font-size: 1.7em;
+            line-height: 1.2;
+            transform: scale(0);
+            transition: all 0.05s cubic-bezier(0.69, 1.1, 0.54, 1.17) 0.13s, opacity 0.3s ease-in-out;
+            z-index: 1;
+          " id="complete-submit">
+            This is the photo of Nyanko🐱 you just posted!<br>Thank you!
+          </tooltip>
           <img :src="imgData.url" :alt="imgData.title" @click="onClickPhoto(index)" @load="loaded(index)" crossorigin="Anonymous"/>
           <div class="download">
             <button @click="onClickDownload(imgData.url)">
@@ -34,6 +48,7 @@ import axios from "axios";
 import Spotlight from "spotlight.js/src/js/spotlight.js";
 import SkeletonLoading from "@/components/SkeletonLoading.vue";
 import AlertBox from "@/components/AlertBox.vue";
+import Tooltip from "@/components/Tooltip.vue";
 import { apiKey } from "@/utils/secret.js";
 export default {
   data() {
@@ -41,7 +56,6 @@ export default {
       imgDataArray: [],
       gallery: [],
       isLoadedImages: [],
-      isLoading: true,
       isStopAnimation: false,
       isShownAlert: false,
     };
@@ -58,18 +72,20 @@ export default {
   watch: {
     isLoadedImages() {
       if (this.isLoadedImages.length === this.imgDataArray.length) {
-        this.isLoading = false;
+        this.$store.commit("changeIsLoadingPhotos", false);
       }
     },
     newRandom(filepathArray) {
-      this.isLoading = true;
+      this.$store.commit("changeIsLoadingPhotos", true);
       this.isLoadedImages = [];  // init
-      this.imgDataArray = [];
+      this.imgDataArray = [];  // init
+      this.gallery = [];  // init
       this.makeImageDataArray(filepathArray);
     },
   },
   methods: {
     loaded(index) {
+      // init
       const removeDuplicateValues = ([...array]) => {
         return array.filter((value, index, self) => self.indexOf(value) === index);
       }
@@ -82,10 +98,10 @@ export default {
       // https://github.com/nextapps-de/spotlight
       Spotlight.show(this.gallery, {
         index: index + 1,
-        animation: "slide, fade",
-        control: "play, zoom, close",
+        animation: "slide, fade",  //"play"
+        control: "zoom, close",
         title: false,
-        play: 3,  // bug (http://github.com/nextapps-de/spotlight/issues/49)
+        // play: 3,  bug (http://github.com/nextapps-de/spotlight/issues/49)
         onshow: (index) => {
           Spotlight.addControl("download-button", (event) => {
             execDownload(this.gallery[index - 1].src);
@@ -134,11 +150,18 @@ export default {
     },
     newRandom() {
       return this.$store.state.filepathArray;
-    }
+    },
+    getIsLoadingPhotos() {
+      return this.$store.state.isLoadingPhotos;
+    },
+    getIsCompletedSubmit() {
+      return this.$store.state.isCompletedSubmit;
+    },
   },
   components: {
     SkeletonLoading,
     AlertBox,
+    Tooltip,
   }
 };
 
@@ -199,6 +222,7 @@ function encodeImgToBase64(img) {
 
 <style lang="scss" scoped>
 #photos-wrap {
+  position: relative;
   column-count: 3;
   column-gap: 0.7%;
 }
@@ -206,7 +230,7 @@ function encodeImgToBase64(img) {
   position: relative;
   margin-bottom: 1.3%;
   cursor: pointer;
-  &:hover > div{
+  &:hover > .download{
     display: block;
   }
 }
@@ -266,6 +290,11 @@ img {
   background-size: 17.5px !important;
   padding-top: 1.777px;
   background-image: url("data:image/svg+xml;base64,  PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNTEyIDUxMjsiIHhtbDpzcGFjZT0icHJlc2VydmUiIGZpbGw9IiNmZmZmZmYiPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik0zODIuNTYsMjMzLjM3NkMzNzkuOTY4LDIyNy42NDgsMzc0LjI3MiwyMjQsMzY4LDIyNGgtNjRWMTZjMC04LjgzMi03LjE2OC0xNi0xNi0xNmgtNjRjLTguODMyLDAtMTYsNy4xNjgtMTYsMTZ2MjA4aC02NA0KCQkJYy02LjI3MiwwLTExLjk2OCwzLjY4LTE0LjU2LDkuMzc2Yy0yLjYyNCw1LjcyOC0xLjYsMTIuNDE2LDIuNTI4LDE3LjE1MmwxMTIsMTI4YzMuMDQsMy40ODgsNy40MjQsNS40NzIsMTIuMDMyLDUuNDcyDQoJCQljNC42MDgsMCw4Ljk5Mi0yLjAxNiwxMi4wMzItNS40NzJsMTEyLTEyOEMzODQuMTkyLDI0NS44MjQsMzg1LjE1MiwyMzkuMTA0LDM4Mi41NiwyMzMuMzc2eiIvPg0KCTwvZz4NCjwvZz4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNNDMyLDM1MnY5Nkg4MHYtOTZIMTZ2MTI4YzAsMTcuNjk2LDE0LjMzNiwzMiwzMiwzMmg0MTZjMTcuNjk2LDAsMzItMTQuMzA0LDMyLTMyVjM1Mkg0MzJ6Ii8+DQoJPC9nPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPC9zdmc+DQo=");
+}
+.tooltip::before{
+  top: 50px !important;
+  border: solid 7.5px transparent !important;
+  border-top: solid 6.5px #444444 !important;
 }
 </style>
 

@@ -15,6 +15,8 @@ export const store = createStore({
       isErrorSubmit: false,
       apiCatStatus: "",
       submitDisabled: true,
+      isLoadingPhotos: true,
+      isCompletedSubmit: false,
     };
   },
   getters: {
@@ -25,6 +27,9 @@ export const store = createStore({
   mutations: {
     sortNewRandomOrder(state) {
       state.filepathArray = shuffle(state.filepathArray);
+    },
+    sortNewRandomOrder_1(state, addedImage) {
+      state.filepathArray = [addedImage].concat(state.filepathArray);
     },
     changeIsModalOpen(state, bool) {
       state.isModalOpen = bool;
@@ -58,6 +63,12 @@ export const store = createStore({
     },
     changeIsErrorSubmit(state, bool) {
       state.isErrorSubmit = bool;
+    },
+    changeIsLoadingPhotos(state, bool) {
+      state.isLoadingPhotos = bool;
+    },
+    changeIsCompletedSubmit(state, bool) {
+      state.isCompletedSubmit = bool;
     },
   },
   actions: {},

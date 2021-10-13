@@ -97,9 +97,6 @@ h2 {
 .fade-leave-to {
   opacity: 0;
 }
-.popup-enter-from {
-  transform: scale(0);
-}
 .fade-shuin-enter-from {
   opacity: 0;
 }
@@ -108,6 +105,9 @@ h2 {
 }
 .fade-shuin-enter-to {
   opacity: 1;
+}
+.popup-enter-from {
+  transform: scale(0);
 }
 .popup-enter-active {
   transition: all 0.13s cubic-bezier(.31,1.15,0,1.27);

@@ -191,8 +191,9 @@ export default {
       this.$store.commit("changeIsSubmitting", true);
 
       // submit
+      let res = null;
       try {
-        await this.axios.post(
+        res = await this.axios.post(
           process.env.VUE_APP_API_ENDPOINT + "post-image", {
             img: this.imgB64,
           }, {
@@ -211,7 +212,7 @@ export default {
         return;
       }
 
-      await delay(999, 1333);
+      await delay(111, 333);
 
       // spinner
       this.$store.commit("changeIsSubmitting", false);
@@ -227,13 +228,19 @@ export default {
       modal.style.transform = null;
       modal.style.transition = null;
 
-      // loading
-
-
+      // new sort loading
+      const addedImage = res.data.replace(/\..*$/gmi, "");
+      this.$store.commit("sortNewRandomOrder_1", addedImage);
 
       // show balloon
+      this.$store.commit("changeIsCompletedSubmit", true);
+      await delay(2222);  // hmmmm....
+      document.getElementById("complete-submit").style.transform= "scale(1)";
+      await delay(5555);
+      document.getElementById("complete-submit").style.opacity = "0";
 
-
+      // init
+      this.$store.commit("changeIsCompletedSubmit", false);
     },
     cancel() {
       this.todoCloseModal();
