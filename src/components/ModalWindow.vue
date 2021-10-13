@@ -234,7 +234,13 @@ export default {
 
       // show balloon
       this.$store.commit("changeIsCompletedSubmit", true);
-      await delay(2222);  // hmmmm....
+      
+      // wait for completed loading
+      do {
+        await delay(333);
+      } while (this.$store.state.isLoadingPhotos);
+      await delay(2222);
+      
       document.getElementById("complete-submit").style.transform= "scale(1)";
       await delay(5555);
       document.getElementById("complete-submit").style.opacity = "0";

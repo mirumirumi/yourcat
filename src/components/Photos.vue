@@ -61,13 +61,15 @@ export default {
     };
   },
   created() {
-    try {
-      this.getImages();
-    } catch (e) {
-      this.isStopAnimation = true;
-      this.isShownAlert = true;
-      return;
-    }
+    (async () => {
+      try {
+        await this.getImages();
+      } catch (e) {
+        this.isStopAnimation = true;
+        this.isShownAlert = true;
+        return;
+      }
+    }) ();
   },
   watch: {
     isLoadedImages() {
@@ -166,7 +168,7 @@ export default {
 };
 
 function getImagesAPI() {
-  return new Promise(async (resolve) => {
+  return new Promise(async (resolve, reject) => {
     let result = [];
     try {
       const res = await axios.get(
@@ -178,7 +180,7 @@ function getImagesAPI() {
       );
       result = res.data;
     } catch (e) {
-      throw e;
+      reject(e);
     }
     resolve(result);
   });
