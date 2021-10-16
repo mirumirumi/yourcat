@@ -186,12 +186,12 @@ function getImagesAPI() {
   });
 }
 
-function makeS3Url(idArray) {
-  return process.env.VUE_APP_S3_BUCKET_URL + idArray + ".jpg";
+function makeS3Url(fileId) {
+  return process.env.VUE_APP_S3_BUCKET_URL + fileId + ".jpg";
 }
 
-function makeFileName(path) {
-  const [, piece] = /([0-9a-f]{8})-.*?$/gmi.exec(path);
+function makeFileName(fileId) {
+  const [, piece] = /([0-9a-f]{8})-.*?$/gmi.exec(fileId);
   return "YourCat_Photo_" + piece;
 }
 
