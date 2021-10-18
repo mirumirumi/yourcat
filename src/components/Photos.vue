@@ -2,7 +2,7 @@
   <div id="photos-wrap">
     <transition name="fade">
       <div class="loading-wrap" v-show="getIsLoadingPhotos">
-        <skeleton-loading v-for="block in blocks" :height="block.height" :isStopAnimation="isStopAnimation"></skeleton-loading>
+        <skeleton-loading v-for="block in blocks" :size="block.size" :isStopAnimation="isStopAnimation"></skeleton-loading>
       </div>
     </transition>
     <transition name="fade">
@@ -23,9 +23,9 @@
             This is the photo of Nyanko🐱 you just posted!<br>Thank you!
           </tooltip>
           <i :style="{'padding-bottom': imgData.size.height / imgData.size.width * 100 + '%'}"></i>
-          <img :src="imgData.url" :alt="imgData.title" @click="onClickPhoto(index)" @load="loaded(index)" crossorigin="Anonymous"/>
+          <img :src="imgData.src" :alt="imgData.title" @click="onClickPhoto(index)" @load="loaded(index)" crossorigin="Anonymous"/>
           <div class="download">
-            <button @click="onClickDownload(imgData.url)">
+            <button @click="onClickDownload(imgData.src)">
               <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
 	 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
               <path d="M382.56,233.376C379.968,227.648,374.272,224,368,224h-64V16c0-8.832-7.168-16-16-16h-64c-8.832,0-16,7.168-16,16v208h-64 c-6.272,0-11.968,3.68-14.56,9.376c-2.624,5.728-1.6,12.416,2.528,17.152l112,128c3.04,3.488,7.424,5.472,12.032,5.472 c4.608,0,8.992-2.016,12.032-5.472l112-128C384.192,245.824,385.152,239.104,382.56,233.376z"/>
@@ -50,7 +50,7 @@ import Spotlight from "spotlight.js/src/js/spotlight.js";
 import SkeletonLoading from "@/components/SkeletonLoading.vue";
 import AlertBox from "@/components/AlertBox.vue";
 import Tooltip from "@/components/Tooltip.vue";
-import { delay } from "@/utils/util.js";
+import { shuffle } from "@/utils/util.js";
 import { apiKey } from "@/utils/secret.js";
 export default {
   data() {
@@ -78,11 +78,11 @@ export default {
         this.$store.commit("changeIsLoadingPhotos", false);
       }
     },
-    newRandom(filepathArray) {
+    newRandom(imgDataArrayState) {
       this.$store.commit("changeIsLoadingPhotos", true);
       this.isLoadedImages = [];  // init
       this.imgDataArray = [];  // init
-      this.makeImageDataArray(filepathArray);
+      this.makeImageDataArray(imgDataArrayState);
     },
   },
   methods: {
@@ -106,7 +106,7 @@ export default {
         // play: 3,  bug (http://github.com/nextapps-de/spotlight/issues/49)
         onshow: (index) => {
           Spotlight.addControl("download-button", (event) => {
-            execDownload(this.gallery[index - 1].src);
+            execDownload(this.imgDataArray[index - 1].src);
           });
         },
         onclose: () => {
@@ -119,21 +119,20 @@ export default {
     },
     async getImages() { 
       try {
-        this.$store.state.imgDataArrayState = await getImagesAPI();
+        this.$store.state.imgDataArrayState = shuffle(await getImagesAPI());
       } catch (e) {
         throw e;
       }
-      this.makeImageDataArray(this.$store.getters.sortOnceRandomOrder);
+      this.makeImageDataArray(this.$store.state.imgDataArrayState);
     },
-    async makeImageDataArray(images) {
-      for (const imgData of images) {
+    makeImageDataArray(images) {
+      for (const image of images) {
         this.imgDataArray.push({
-          url: makeS3Url(imgData.file_id),
-          src: makeS3Url(imgData.file_id),  // for spotlight
-          title: makeFileName(imgData.file_id),
+          src: makeS3Url(image.file_id),  // for spotlight too
+          title: makeFileName(image.file_id),
           size: {
-            width: imgData.size.width,
-            height: imgData.size.height,
+            width: image.size.width,
+            height: image.size.height,
           }
         });
       }
@@ -141,13 +140,22 @@ export default {
   },
   computed: {
     blocks() {
+      function getRandomRange(min, max) {
+        return Math.floor(Math.random() * (min - max + 1) + max);
+      }
       let result = [];
       [...Array(30)].map(() => {
-        const minHeight = 100;
+        const minHeight = 111;
         const maxHeight = 333;
-        const height = Math.floor(Math.random() * (minHeight - maxHeight + 1) + maxHeight);
+        const height =  getRandomRange(minHeight, maxHeight);
+        const minWidth = 222;
+        const maxWidth = 555;
+        const width =  getRandomRange(minWidth, maxWidth);
         result.push({
-          height: height,
+          size: {
+            width: width,
+            height: height,
+          }
         })
       });
       return result;
@@ -195,19 +203,6 @@ function makeS3Url(fileId) {
 function makeFileName(fileId) {
   const [, piece] = /([0-9a-f]{8})-.*?$/gmi.exec(fileId);
   return "YourCat_Photo_" + piece;
-}
-
-function getHeight(fileId) {
-  return new Promise(async (resolve) => {
-    const image = new Image();
-    image.src = makeS3Url(fileId);
-    await delay(1000);
-    console.log(image.height);
-    resolve({
-      width: image.width,
-      height: image.height,
-    });
-  });
 }
 
 async function execDownload(url) {

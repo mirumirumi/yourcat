@@ -1,13 +1,16 @@
 <template>
-  <div class="loading-block" :class="{'stop-loading': isStopAnimation}" :style="{height: height + 'px'}"></div>
+  <div class="loading-block-wrap" :style="{'width': size.width * 200 / size.height + 'px', 'flex-grow': size.width * 200 / size.height}">
+    <i :style="{'padding-bottom': size.height / size.width * 100 + '%'}"></i>
+    <div class="loading-block" :class="{'stop-loading': isStopAnimation}" :height="size.height"></div>
+  </div>
 </template>
 
 <script>
 export default {
   props: {
-    height: {
-      type: Number,
-      default: 50,
+    size: {
+      type: Object,
+      default: {},
     },
     isStopAnimation: {
       type: Boolean,
@@ -18,9 +21,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.loading-block {
+.loading-block-wrap {
   position: relative;
-  display: inline-block;
+  flex-grow: 1;
+  margin: 5px;
+  &:hover > .download{
+    display: block;
+  }
+}
+.loading-block {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  height: 100%;
+  flex-grow: 1;
+  object-fit: cover;
+  vertical-align: bottom;
   margin-bottom: 3.7%;
   width: 100%;
   border-radius: 5px;
@@ -43,6 +61,9 @@ export default {
     transform: translateX(-200%);
     animation: skeleton 2.1s infinite;
   }
+}
+i {
+  display: block;
 }
 .stop-loading {
   &::after {

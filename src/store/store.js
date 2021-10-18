@@ -1,4 +1,5 @@
 import {createStore} from "vuex";
+import { shuffle } from "@/utils/util.js";
 
 export const store = createStore({
   state() {
@@ -18,11 +19,6 @@ export const store = createStore({
       isLoadingPhotos: true,
       isCompletedSubmit: false,
     };
-  },
-  getters: {
-    sortOnceRandomOrder(state) {
-      return shuffle(state.imgDataArrayState);
-    },
   },
   mutations: {
     sortNewRandomOrder(state) {
@@ -74,10 +70,4 @@ export const store = createStore({
   actions: {},
 });
 
-const shuffle = ([...array]) => {
-  for (let i = array.length - 1; i >= 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-};
+
