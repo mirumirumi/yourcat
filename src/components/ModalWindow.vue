@@ -92,7 +92,11 @@ export default {
   data() {
     return {
       isCheckedAcceptData: false,
-      imgB64: "",
+      imageData: {
+        base64: "",
+        width: null,
+        height: null,
+      },
     };
   },
   methods: {
@@ -130,7 +134,7 @@ export default {
 
       // preview thumb & get base64
       const target = this.$refs.preview;
-      this.imgB64 = await makePreviewFile(blob, target);
+      this.imageData = await makePreviewFile(blob, target);
 
       // trigger file selected
       this.$store.commit("changeIsFileSelected", true);
@@ -141,7 +145,7 @@ export default {
       // check API (is-the-cat)
       this.axios.post(
         process.env.VUE_APP_API_ENDPOINT + "is-the-cat", {
-          img: this.imgB64,
+          image_data: this.imageData,
         }, {
           headers: {
             "x-api-key": apiKey,
@@ -195,7 +199,7 @@ export default {
       try {
         res = await this.axios.post(
           process.env.VUE_APP_API_ENDPOINT + "post-image", {
-            img: this.imgB64,
+            image_data: this.imageData,
           }, {
             headers: {
               "x-api-key": apiKey,
@@ -229,7 +233,8 @@ export default {
       modal.style.transition = null;
 
       // new sort loading
-      const addedImage = res.data.replace(/\..*$/gmi, "");
+      res.data.file_id = res.data.file_id.replace(/\..*$/gmi, "");
+      const addedImage = res.data;
       this.$store.commit("sortNewRandomOrder_1", addedImage);
 
       // show balloon
@@ -307,8 +312,8 @@ function isOverSizeLimit(file) {
 }
 
 async function makePreviewFile(file, target) {
-  const imgB64 = await fileReader(file, target);
-  return imgB64;
+  const imageData = await fileReader(file, target);
+  return imageData;
 
   function fileReader(file, target) {
     return new Promise((resolve) => {
@@ -329,7 +334,11 @@ async function makePreviewFile(file, target) {
         target.appendChild(img);
         setTimeout(() => {
           img.style.opacity = "1";
-          resolve(reader.result);
+          resolve({
+            base64: reader.result,
+            width: img.width,
+            height: img.height,
+          });
         }, 33.3);
       }
     });
