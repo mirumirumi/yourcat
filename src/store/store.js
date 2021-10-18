@@ -3,7 +3,7 @@ import {createStore} from "vuex";
 export const store = createStore({
   state() {
     return {
-      filepathArray: [],
+      imgDataArrayState: [],
       isModalOpen: false,
       isNotExistFile: true,
       isOverLimit: false,
@@ -21,15 +21,15 @@ export const store = createStore({
   },
   getters: {
     sortOnceRandomOrder(state) {
-      return shuffle(state.filepathArray);
+      return shuffle(state.imgDataArrayState);
     },
   },
   mutations: {
     sortNewRandomOrder(state) {
-      state.filepathArray = shuffle(state.filepathArray);
+      state.imgDataArrayState = shuffle(state.imgDataArrayState);
     },
     sortNewRandomOrder_1(state, addedImage) {
-      state.filepathArray = [addedImage].concat(state.filepathArray);
+      state.imgDataArrayState = [addedImage].concat(state.imgDataArrayState);
     },
     changeIsModalOpen(state, bool) {
       state.isModalOpen = bool;

@@ -7,7 +7,7 @@
     </transition>
     <transition name="fade">
       <div class="photo-wrap" v-show="!getIsLoadingPhotos">
-        <div class="photo" v-for="imgData, index in imgDataArray" :key="imgData">
+        <div class="photo" v-for="imgData, index in imgDataArray" :key="imgData" :style="{'width': imgData.size.width * 200 / imgData.size.height + 'px', 'flex-grow': imgData.size.width * 200 / imgData.size.height}">
           <tooltip v-if="(index == 0) && (getIsCompletedSubmit)" style="
             top: -2.2em;
             right: -3.3em;
@@ -22,6 +22,7 @@
           " id="complete-submit">
             This is the photo of Nyanko🐱 you just posted!<br>Thank you!
           </tooltip>
+          <i :style="{'padding-bottom': imgData.size.height / imgData.size.width * 100 + '%'}"></i>
           <img :src="imgData.url" :alt="imgData.title" @click="onClickPhoto(index)" @load="loaded(index)" crossorigin="Anonymous"/>
           <div class="download">
             <button @click="onClickDownload(imgData.url)">
@@ -49,12 +50,12 @@ import Spotlight from "spotlight.js/src/js/spotlight.js";
 import SkeletonLoading from "@/components/SkeletonLoading.vue";
 import AlertBox from "@/components/AlertBox.vue";
 import Tooltip from "@/components/Tooltip.vue";
+import { delay } from "@/utils/util.js";
 import { apiKey } from "@/utils/secret.js";
 export default {
   data() {
     return {
       imgDataArray: [],
-      gallery: [],
       isLoadedImages: [],
       isStopAnimation: false,
       isShownAlert: false,
@@ -81,7 +82,6 @@ export default {
       this.$store.commit("changeIsLoadingPhotos", true);
       this.isLoadedImages = [];  // init
       this.imgDataArray = [];  // init
-      this.gallery = [];  // init
       this.makeImageDataArray(filepathArray);
     },
   },
@@ -98,7 +98,7 @@ export default {
     },
     onClickPhoto(index) {
       // https://github.com/nextapps-de/spotlight
-      Spotlight.show(this.gallery, {
+      Spotlight.show(this.imgDataArray, {
         index: index + 1,
         animation: "slide, fade",  //"play"
         control: "zoom, close",
@@ -119,20 +119,22 @@ export default {
     },
     async getImages() { 
       try {
-        this.$store.state.filepathArray = await getImagesAPI();
+        this.$store.state.imgDataArrayState = await getImagesAPI();
       } catch (e) {
         throw e;
       }
       this.makeImageDataArray(this.$store.getters.sortOnceRandomOrder);
     },
-    makeImageDataArray(images) {
+    async makeImageDataArray(images) {
       for (const imgData of images) {
         this.imgDataArray.push({
-          url: makeS3Url(imgData),
-          title: makeFileName(imgData),
-        });
-        this.gallery.push({
-          src: makeS3Url(imgData),
+          url: makeS3Url(imgData.file_id),
+          src: makeS3Url(imgData.file_id),  // for spotlight
+          title: makeFileName(imgData.file_id),
+          size: {
+            width: imgData.size.width,
+            height: imgData.size.height,
+          }
         });
       }
     },
@@ -151,7 +153,7 @@ export default {
       return result;
     },
     newRandom() {
-      return this.$store.state.filepathArray;
+      return this.$store.state.imgDataArrayState;
     },
     getIsLoadingPhotos() {
       return this.$store.state.isLoadingPhotos;
@@ -195,6 +197,19 @@ function makeFileName(fileId) {
   return "YourCat_Photo_" + piece;
 }
 
+function getHeight(fileId) {
+  return new Promise(async (resolve) => {
+    const image = new Image();
+    image.src = makeS3Url(fileId);
+    await delay(1000);
+    console.log(image.height);
+    resolve({
+      width: image.width,
+      height: image.height,
+    });
+  });
+}
+
 async function execDownload(url) {
   const a = document.createElement("a");
   document.body.appendChild(a);
@@ -223,22 +238,38 @@ function encodeImgToBase64(img) {
 </script>
 
 <style lang="scss" scoped>
-#photos-wrap {
+.photo-wrap, .loading-wrap {
   position: relative;
-  column-count: 3;
-  column-gap: 0.7%;
+  // column-count: 3;
+  // column-gap: 0.7%;
+  display: flex;
+  flex-wrap: wrap;
+  &::after {
+    content: '';
+    flex-grow: 999999999;
+  }
 }
 .photo {
   position: relative;
-  margin-bottom: 1.3%;
+  flex-grow: 1;
+  margin: 5px;
   cursor: pointer;
   &:hover > .download{
     display: block;
   }
 }
+i {
+  display: block;
+}
 img {
+  position: absolute;
+  top: 0;
   width: 100%;
-  // vertical-align: middle;
+  min-width: 100%;
+  max-width: 100%;
+  flex-grow: 1;
+  object-fit: cover;
+  vertical-align: bottom;
   border-radius: 3px;
   box-sizing: border-box;
   box-shadow: 1px 1px 2px 0px rgb(13 13 13 / 31%);
