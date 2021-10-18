@@ -2,7 +2,7 @@
   <div id="photos-wrap">
     <transition name="fade">
       <div class="loading-wrap" v-show="getIsLoadingPhotos">
-        <skeleton-loading v-for="block in blocks" :size="block.size" :isStopAnimation="isStopAnimation"></skeleton-loading>
+        <skeleton-loading v-for="block in getBlocks" :size="block.size" :isStopAnimation="isStopAnimation"></skeleton-loading>
       </div>
     </transition>
     <transition name="fade">
@@ -139,26 +139,8 @@ export default {
     },
   },
   computed: {
-    blocks() {
-      function getRandomRange(min, max) {
-        return Math.floor(Math.random() * (min - max + 1) + max);
-      }
-      let result = [];
-      [...Array(30)].map(() => {
-        const minHeight = 111;
-        const maxHeight = 333;
-        const height =  getRandomRange(minHeight, maxHeight);
-        const minWidth = 222;
-        const maxWidth = 555;
-        const width =  getRandomRange(minWidth, maxWidth);
-        result.push({
-          size: {
-            width: width,
-            height: height,
-          }
-        })
-      });
-      return result;
+    getBlocks() {
+      return this.$store.getters.getBlocks;
     },
     newRandom() {
       return this.$store.state.imgDataArrayState;

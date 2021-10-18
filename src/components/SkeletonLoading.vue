@@ -1,5 +1,5 @@
 <template>
-  <div class="loading-block-wrap" :style="{'width': size.width * 200 / size.height + 'px', 'flex-grow': size.width * 200 / size.height}">
+  <div class="loading-block-wrap" :style="{'width': size.width * 133 / size.height + 'px', 'flex-grow': size.width * 133 / size.height}">
     <i :style="{'padding-bottom': size.height / size.width * 100 + '%'}"></i>
     <div class="loading-block" :class="{'stop-loading': isStopAnimation}" :height="size.height"></div>
   </div>
