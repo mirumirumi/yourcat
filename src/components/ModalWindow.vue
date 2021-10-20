@@ -107,7 +107,7 @@ export default {
       // delete previous preview thumb
       const img = document.getElementById("preview-image");
       const file = this.$refs.fileInput.files[0];
-      this.imgB64 = "";
+      this.imageData.base64 = "";
       if (img) img.remove();
       if (!file) {
         this.$store.commit("changeIsNotExistFile", true);
@@ -244,11 +244,12 @@ export default {
       do {
         await delay(333);
       } while (this.$store.state.isLoadingPhotos);
-      await delay(2222);
+      await delay(777);
       
       document.getElementById("complete-submit").style.transform= "scale(1)";
-      await delay(5555);
+      await delay(6666);
       document.getElementById("complete-submit").style.opacity = "0";
+      await delay(999);
 
       // init
       this.$store.commit("changeIsCompletedSubmit", false);
@@ -336,8 +337,8 @@ async function makePreviewFile(file, target) {
           img.style.opacity = "1";
           resolve({
             base64: reader.result,
-            width: img.width,
-            height: img.height,
+            width: img.naturalWidth,
+            height: img.naturalHeight,
           });
         }, 33.3);
       }
