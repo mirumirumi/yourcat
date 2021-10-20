@@ -9,7 +9,7 @@
         <span>Upload Your Cat</span>
       </button>
       <button class="random" @click="sortNewRandomOrder()" style="margin: 0">
-        <span>New Random Order</span>
+        <span>New Random Cats</span>
       </button>
     </div>
   </div>
