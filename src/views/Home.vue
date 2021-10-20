@@ -6,6 +6,9 @@
   <main id="photos">
     <photos></photos>
   </main>
+  <footer>
+    <span>Want to see more Nyanko🐱?&nbsp;&nbsp;Then let's <span id="footer-new-random" @click="newRandom()">New Random Cats</span>.</span>
+  </footer>
 </template>
 
 <script>
@@ -14,8 +17,10 @@ import SiteDescription from "@/components/SiteDescription.vue";
 import Photos from "@/components/Photos.vue";
 import Buttons from "@/components/Buttons.vue";
 export default {
-  computed: {
-
+  methods: {
+    newRandom() {
+      this.$store.dispatch("sortNewRandomOrder");
+    },
   },
   components: {
     SiteDescription,
@@ -26,6 +31,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+footer {
+  margin: 3.5em auto 4em;
+  text-align: center;
+  & > span {
+    font-size: 1.1em;
+    color: #8f8b88;
+    #footer-new-random {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+}
+
 </style>
 
 

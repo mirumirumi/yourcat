@@ -28,7 +28,7 @@ export default {
       this.$store.commit("changeIsModalOpen", true);
     },
     sortNewRandomOrder() {
-      this.$store.commit("sortNewRandomOrder");
+      this.$store.dispatch("sortNewRandomOrder");
     },
   }
 }

@@ -1,3 +1,6 @@
+import axios from "axios";
+import { apiKey } from "@/utils/secret.js";
+
 export const shuffle = ([...array]) => {
   for (let i = array.length - 1; i >= 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -5,6 +8,25 @@ export const shuffle = ([...array]) => {
   }
   return array;
 };
+
+export function getImagesAPI() {
+  return new Promise(async (resolve, reject) => {
+    let result = [];
+    try {
+      const res = await axios.get(
+        process.env.VUE_APP_API_ENDPOINT + "get-image", {
+          headers: {
+            "x-api-key": apiKey,
+          }
+        },
+      );
+      result = res.data;
+    } catch (e) {
+      reject(e);
+    }
+    resolve(result);
+  });
+}
 
 export function toggleTimelineCurrentClass(newItem) {
   const classes = document.getElementsByClassName("progress")

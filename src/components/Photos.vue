@@ -48,13 +48,12 @@
 </template>
 
 <script>
-import axios from "axios";
 import Spotlight from "spotlight.js/src/js/spotlight.js";
 import SkeletonLoading from "@/components/SkeletonLoading.vue";
 import AlertBox from "@/components/AlertBox.vue";
 import Tooltip from "@/components/Tooltip.vue";
 import { shuffle } from "@/utils/util.js";
-import { apiKey } from "@/utils/secret.js";
+import { getImagesAPI } from "@/utils/util.js";
 export default {
   data() {
     return {
@@ -79,6 +78,7 @@ export default {
     isLoadedImages() {
       if (this.isLoadedImages.length === this.imgDataArray.length) {
         this.$store.commit("changeIsLoadingPhotos", false);
+        scrollTop();
       }
     },
     newRandom(imgDataArrayState) {
@@ -162,25 +162,6 @@ export default {
   }
 };
 
-function getImagesAPI() {
-  return new Promise(async (resolve, reject) => {
-    let result = [];
-    try {
-      const res = await axios.get(
-        process.env.VUE_APP_API_ENDPOINT + "get-image", {
-          headers: {
-            "x-api-key": apiKey,
-          }
-        },
-      );
-      result = res.data;
-    } catch (e) {
-      reject(e);
-    }
-    resolve(result);
-  });
-}
-
 function makeS3Url(fileId) {
   return process.env.VUE_APP_S3_BUCKET_URL + fileId + ".jpg";
 }
@@ -215,6 +196,16 @@ function encodeImgToBase64(img) {
     };
   });
 }
+
+function scrollTop(){
+  if(document.scrollingElement.scrollTop < 10){
+    document.scrollingElement.scrollTop = 0;
+  }
+  else{
+    document.scrollingElement.scrollTop = document.scrollingElement.scrollTop / 1.333;
+    setTimeout(scrollTop , 10);
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -224,10 +215,10 @@ function encodeImgToBase64(img) {
   // column-gap: 0.7%;
   display: flex;
   flex-wrap: wrap;
-  &::after {
-    content: '';
-    flex-grow: 999999999;
-  }
+  // &::after {
+  //   content: '';
+  //   flex-grow: 999999999;
+  // }
 }
 .photo {
   position: relative;
@@ -300,6 +291,9 @@ img {
 <style lang="scss" >
 #spotlight {
   background-color: #1f1a17f2 !important;
+  .spl-title {
+    display: none !important;  // temporary
+  }
 }
 .spl-fullscreen {
   display: none !important;

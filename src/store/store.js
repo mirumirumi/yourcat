@@ -1,5 +1,6 @@
 import {createStore} from "vuex";
 import { shuffle } from "@/utils/util.js";
+import { getImagesAPI } from "@/utils/util.js";
 
 export const store = createStore({
   state() {
@@ -27,10 +28,6 @@ export const store = createStore({
     }
   },
   mutations: {
-    sortNewRandomOrder(state) {
-      state.blocks = randomBlocks(state.blocks);
-      state.imgDataArrayState = shuffle(state.imgDataArrayState);
-    },
     sortNewRandomOrder_1(state, addedImage) {
       state.blocks = randomBlocks(state.blocks);
       state.imgDataArrayState = [addedImage].concat(state.imgDataArrayState);
@@ -75,7 +72,12 @@ export const store = createStore({
       state.isCompletedSubmit = bool;
     },
   },
-  actions: {},
+  actions: {
+    async sortNewRandomOrder({ state }) {
+      state.blocks = randomBlocks(state.blocks);
+      state.imgDataArrayState = shuffle(await getImagesAPI());
+    },
+  },
 });
 
 function randomBlocks() {
