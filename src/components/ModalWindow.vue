@@ -39,12 +39,12 @@
       <label for="accept" @click="falseIsShownAlert(); enableSubmitButton()">
         <input type="checkbox" id="accept" v-model="isCheckedAcceptData">
         <span class="checkbox"></span>
-        <span class="content">I agree to the <router-link to="/privacy">Privacy Policy</router-link> and <router-link to="/license">License Statement</router-link> by submitting this image file.</span>
+        <span class="content">I agree to the <router-link to="/terms">Terms</router-link> and <router-link to="/privacy">Privacy Policy</router-link> by submitting this image file.</span>
       </label>
     </div>
     <transition name="popup">
       <alert-box v-show="getIsShownAlert" class="accept">
-        Please accept privacy policy and license statement.
+        Please accept Terms and Privacy Policy.
       </alert-box>
     </transition>
     <div class="btn-wrap">

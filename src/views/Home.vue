@@ -1,6 +1,19 @@
 <template>
   <section id="description">
-    <site-description></site-description>
+    <div class="title">
+      <h2>Publish YourCat</h2>
+    </div>
+    <div class="content">
+      <p>Post a photo of your best cat.</p>
+      <p>This is not a SNS. There is no account and no comments on the photos. Once you post a picture, you don't even know when you will see it again.</p>
+      <p>This is a once-in-a-lifetime encounter!<span style="
+        display: inline-block;
+        margin-left: 0.37em;
+        color: transparent;
+        text-shadow: 0 0 0 #8c8885;
+        transform: rotate(17deg);
+      ">🐾</span></p>
+    </div>
   </section>
   <buttons></buttons>
   <main id="photos">
@@ -12,20 +25,32 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import SiteDescription from "@/components/SiteDescription.vue";
 import Photos from "@/components/Photos.vue";
 import Buttons from "@/components/Buttons.vue";
+import ModalClose from "@/mixin/modal-close.js";
+import StateReset from "@/mixin/state-reset.js";
 export default {
+  mixins: [
+    ModalClose,
+    StateReset,
+  ],
+  data() {
+    return {
+      lang: "en",
+    };
+  },
   methods: {
     newRandom() {
       this.$store.dispatch("sortNewRandomOrder");
     },
   },
   components: {
-    SiteDescription,
     Photos,
     Buttons,
+  },
+  beforeRouteLeave(to, from, next) {
+    this.todoCloseModal();
+    next();
   },
 };
 </script>
@@ -43,7 +68,6 @@ footer {
     }
   }
 }
-
 </style>
 
 
