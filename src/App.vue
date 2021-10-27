@@ -7,7 +7,7 @@
       <nav id="nav">
         <router-link to="/terms">Terms</router-link>
         <router-link to="/privacy">Privacy</router-link>
-        <a class="twitter-icon" href="https://twitter.com/">
+        <a class="twitter-icon" href="https://twitter.com/YourCat_photos">
           &nbsp;
           <svg aria-hidden="true" focusable="false" data-prefix="fab"   data-icon="twitter" class="svg-inline--fa fa-twitter fa-w-16"   role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
           <path

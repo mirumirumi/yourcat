@@ -73,7 +73,6 @@ import { toggleTimelineCurrentClass } from "@/utils/util.js";
 import { delay } from "@/utils/util.js";
 import { removeExif } from "@/utils/util.js";
 import { getImageFileType } from "@/utils/util.js";
-import { apiKey } from "@/utils/secret.js";
 const timeToDrawCheckmark = 1333;
 export default {
   mixins: [
@@ -148,7 +147,7 @@ export default {
           image_data: this.imageData,
         }, {
           headers: {
-            "x-api-key": apiKey,
+            "x-api-key": process.env.VUE_APP_API_KEY,
           }
         },
       ).then(async (res) => {
@@ -202,7 +201,7 @@ export default {
             image_data: this.imageData,
           }, {
             headers: {
-              "x-api-key": apiKey,
+              "x-api-key": process.env.VUE_APP_API_KEY,
             }
           },
         );

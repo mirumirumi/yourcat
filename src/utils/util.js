@@ -1,5 +1,4 @@
 import axios from "axios";
-import { apiKey } from "@/utils/secret.js";
 
 export const shuffle = ([...array]) => {
   for (let i = array.length - 1; i >= 0; i--) {
@@ -16,7 +15,7 @@ export function getImagesAPI() {
       const res = await axios.get(
         process.env.VUE_APP_API_ENDPOINT + "get-image", {
           headers: {
-            "x-api-key": apiKey,
+            "x-api-key": process.env.VUE_APP_API_KEY,
           }
         },
       );
