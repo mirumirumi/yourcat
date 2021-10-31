@@ -181,6 +181,9 @@ export default {
       this.$store.commit("changeIsGoTooltip", true);
     },
     async onClickSubmit() {
+      // no double-pressing
+      this.$store.commit("changeSubmitDisabled", true);
+
       // off submit error
       this.$store.commit("changeIsErrorSubmit", false);
 
