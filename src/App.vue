@@ -100,7 +100,7 @@ h2 {
   }
 }
 .content {
-  margin: 3em auto 3em;
+  margin: 2.3em auto 3em;
   width: 100%;
   max-width: 700px;
   line-height: 1.5;
