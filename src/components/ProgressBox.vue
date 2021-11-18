@@ -113,6 +113,9 @@ div.progress {
   }
   div.text-content {
     margin: auto 0.7em auto 1em;
+    @include mobile {
+      width: 100%;
+    }
     span {
       color: #ded8d4;
       transition: 0.37s all ease-out;

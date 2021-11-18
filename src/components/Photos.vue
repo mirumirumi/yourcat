@@ -10,14 +10,15 @@
         <!-- https://github.com/xieranmaya/blog/issues/6 -->
         <div class="photo" v-for="imgData, index in imgDataArray" :key="imgData" :style="{'width': imgData.size.width * 200 / imgData.size.height + 'px', 'flex-grow': imgData.size.width * 200 / imgData.size.height}">
           <tooltip v-if="(index == 0) && (getIsCompletedSubmit)" style="
-            top: -2.2em;
-            right: -3.3em;
+            top: -2.4em;
+            left: 50%;
             bottom: 0px;
             width: 400px;
             height: 50px;
             font-size: 1.7em;
             line-height: 1.2;
             background-color: #55a465;
+            border-radius: 13px 13px 13px 0px;
             transform: scale(0);
             transition: all 0.05s cubic-bezier(0.69, 1.1, 0.54, 1.17) 0.13s, opacity 0.3s ease-in-out;
             opacity: 1;
@@ -228,6 +229,16 @@ function scrollTop(){
   &:hover > .download{
     display: block;
   }
+  @include mobile {
+    .tooltip {
+      top: -2.7em !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: auto !important;
+      max-width: 100% !important;
+      border-radius: 13px !important;
+    }
+  }
 }
 i {
   display: block;
@@ -284,8 +295,14 @@ img {
 }
 .tooltip::before{
   top: 50px !important;
-  border: solid 7.5px transparent !important;
-  border-top: solid 6.5px #55a465 !important;
+  left: 5.5px !important;
+  border: solid 11px transparent !important;
+  border-top: solid 11px #55a465 !important;
+  border-left: solid 0px transparent !important;
+  @include mobile {
+    left: 50% !important;
+    border-left: solid 11px transparent !important;
+  }
 }
 </style>
 <style lang="scss" >

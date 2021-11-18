@@ -390,6 +390,10 @@ function drawBoundingBox(boundingBoxArray, target) {
   & > * {
     margin: 1em auto;
   }
+  @include mobile {
+    padding: 0.7em 0.7em;
+    max-width: calc(95% - 0.7em * 2);
+  }
 }
 .image-form{
   display: flex;
@@ -463,6 +467,9 @@ div#preview-wrap {
 <style lang="scss" scoped>
 .progress-wrap {
   margin: 0.3em auto 0.7em;
+  @include mobile {
+    margin: 0.3em 0.7em 0.7em;
+  }
 }
 .items > div {
   position: relative;
@@ -505,6 +512,9 @@ div#preview-wrap {
   border-radius: 5px;
   font-size: 0.87em;
   color: #97918d;
+  @include mobile {
+    display: flex;
+  }
   label {
     position: relative;
     user-select: none;
@@ -546,6 +556,11 @@ div#preview-wrap {
     }
     span.content {
       padding-left: 27px;
+      @include mobile {
+        display: inline-block;
+        margin: 0;
+        padding: 0 5px 0 28px;
+      }
       a {
         color: #97918d;
       }

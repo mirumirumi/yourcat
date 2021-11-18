@@ -72,7 +72,10 @@ export default {
 body {
   margin: 0;
   background-color: #fffcf9;
-  // font-size: 18px;
+  font-size: 16px;
+  @include mobile {
+    font-size: 14px;
+  }
 }
 #app {
   margin: auto;
@@ -90,6 +93,9 @@ h2 {
   margin: 0.3em auto 0.7em;
   font-size: 2em;
   text-align: center;
+  @include mobile {
+    margin: 0.5em auto -0.1em;
+  }
 }
 .eye-catch {
   margin: 3em auto 2em;
@@ -108,6 +114,10 @@ h2 {
     color: #6a6663;
     font-size: 1.1em;
     font-family: "Verdana";
+  }
+  @include mobile {
+    padding: 0 1em;
+    width: auto;
   }
 }
 .fade-enter-active,
@@ -186,6 +196,9 @@ header {
   align-items: center;
   justify-content: space-between;
   padding: 17px 33px 19px;
+  @include mobile {
+    padding: 13px 23px 23px 7px;
+  }
 }
 #site-logo {
   h1 {
