@@ -22,6 +22,9 @@
   <footer>
     <span>Want to see more Nyanko🐱?&nbsp;&nbsp;Then let's <span id="footer-new-random" @click="newRandom()">New Random Cats</span>.</span>
   </footer>
+  <transition name="fade">
+    <buttons v-show="judgeScrolled && !getIsModalOpen" :isScrolled="isScrolled"></buttons>
+  </transition>
 </template>
 
 <script>
@@ -34,14 +37,31 @@ export default {
     ModalClose,
     StateReset,
   ],
+  created() {
+    window.addEventListener("scroll", this.onScroll);
+  },
   data() {
     return {
-      lang: "en",
+      // lang: "en",
+      scrollVal: 0,
+      isScrolled: false,
     };
   },
   methods: {
     newRandom() {
       this.$store.dispatch("sortNewRandomOrder");
+    },
+    onScroll() {
+      this.scrollVal = document.documentElement.scrollTop;
+    },
+  },
+  computed: {
+    getIsModalOpen() {
+      return this.$store.state.isModalOpen;
+    },
+    judgeScrolled() {
+      this.isScrolled = 477 < this.scrollVal;
+      return this.isScrolled;
     },
   },
   components: {
@@ -63,6 +83,7 @@ footer {
     font-size: 1.1em;
     color: #8f8b88;
     #footer-new-random {
+      display: inline-block;
       text-decoration: underline;
       cursor: pointer;
     }
