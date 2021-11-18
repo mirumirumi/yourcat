@@ -91,15 +91,6 @@ export default {
     background-color: $white_hover_color;
   }
 }
-
-
 </style>
-
-
-
-
-
-
-
 
 
