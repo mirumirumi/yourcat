@@ -1,7 +1,4 @@
 secret.js
-/public/*.jpg
-/public/*.JPG
-/public/*.png
 github-actions-deploy*
 
 
