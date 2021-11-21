@@ -21,6 +21,6 @@ jobs:
           username: ${{ secrets.CONOHA_USERNAME }}
           port: ${{ secrets.CONOHA_PORT }}
           key: ${{ secrets.CONOHA_FINGERPRINT }}
-          source: "dist/*"
-          target: "public_html/mirumi.me/apps/yourcat"
+          source: "dist/index.html, dist/favicon.png, dist/yourcat-main-visual.png, dist/js/*"
+          target: "public_html/mirumi.me/apps/yourcat/"
           rm: true
