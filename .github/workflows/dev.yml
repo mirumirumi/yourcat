@@ -27,5 +27,6 @@ jobs:
 
       - name: prd deploy
         run: |
-          ssh -i ${{ secrets.CONOHA_FINGERPRINT }} ${{ secrets.CONOHA_USERNAME }}@${{ secrets.CONOHA_HOST }} -p ${{ secrets.CONOHA_PORT }} rm -r public_html/mirumi.me/apps/yourcat/*
-          scp -r -i ${{ secrets.CONOHA_FINGERPRINT }} -P ${{ secrets.CONOHA_PORT }} dist/* ${{ secrets.CONOHA_USERNAME }}@${{ secrets.CONOHA_HOST }}:public_html/mirumi.me/apps/yourcat/
+          echo ${{ secrets.CONOHA_FINGERPRINT }} > ~/temp/key.pem
+          ssh -i ~/temp/key.pem ${{ secrets.CONOHA_USERNAME }}@${{ secrets.CONOHA_HOST }} -p ${{ secrets.CONOHA_PORT }} rm -r public_html/mirumi.me/apps/yourcat/*
+          scp -r -i ~/temp/key.pem -P ${{ secrets.CONOHA_PORT }} dist/* ${{ secrets.CONOHA_USERNAME }}@${{ secrets.CONOHA_HOST }}:public_html/mirumi.me/apps/yourcat/
