@@ -29,9 +29,8 @@ jobs:
         run: |
           touch key.pem
           echo ${{ secrets.CONOHA_PRIVATE_KEY }} > ./key.pem
-          cat ./key.pem
           sed -i -E -z 's/###/\n/g' ./key.pem
-          cat ./key.pem
           chmod 600 ./key.pem
           ssh -oStrictHostKeyChecking=no -i ./key.pem ${{ secrets.CONOHA_USERNAME }}@${{ secrets.CONOHA_HOST }} -p ${{ secrets.CONOHA_PORT }} rm -r public_html/mirumi.me/apps/yourcat/*
+          ls -lha dist/
           scp -r -i ./key.pem -P ${{ secrets.CONOHA_PORT }} dist/* ${{ secrets.CONOHA_USERNAME }}@${{ secrets.CONOHA_HOST }}:public_html/mirumi.me/apps/yourcat/
