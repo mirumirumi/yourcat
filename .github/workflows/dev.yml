@@ -20,7 +20,7 @@ jobs:
           host: ${{ secrets.CONOHA_HOST }}
           username: ${{ secrets.CONOHA_USERNAME }}
           port: ${{ secrets.CONOHA_PORT }}
-          fingerprint: ${{ secrets.CONOHA_FINGERPRINT }}
+          key: ${{ secrets.CONOHA_FINGERPRINT }}
           source: "dist/*"
           target: "public_html/mirumi.me/apps/yourcat"
           rm: true
