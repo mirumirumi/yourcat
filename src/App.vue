@@ -2,7 +2,7 @@
   <div id="app-content" :class="{'blur': getIsModalOpen}">
     <header>
       <div id="site-logo">
-        <h1><a href="/"><img :src="pawPrint">YourCat</a></h1>
+        <h1><a href="/apps/yourcat"><img :src="pawPrint">YourCat</a></h1>
       </div>
       <nav id="nav">
         <router-link to="/terms">Terms</router-link>
