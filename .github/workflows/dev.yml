@@ -29,6 +29,7 @@ jobs:
         run: |
           touch key.pem
           echo ${{ secrets.CONOHA_PRIVATE_KEY }} > ./key.pem
+          cat ./key.pem
           sed -i -E -z 's/\\n/\n/g' ./key.pem
           cat ./key.pem
           chmod 600 ./key.pem
