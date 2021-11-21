@@ -14,13 +14,19 @@ jobs:
       - run: npm install
       - run: npm run build-prd
       
+#       - name: prd deploy
+#         uses: appleboy/scp-action@master
+#         with:
+#           host: ${{ secrets.CONOHA_HOST }}
+#           username: ${{ secrets.CONOHA_USERNAME }}
+#           port: ${{ secrets.CONOHA_PORT }}
+#           key: ${{ secrets.CONOHA_FINGERPRINT }}
+#           source: "dist/index.html, dist/favicon.png, dist/yourcat-main-visual.png, dist/js/*"
+#           target: "public_html/mirumi.me/apps/yourcat/"
+#           rm: true
+
       - name: prd deploy
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.CONOHA_HOST }}
-          username: ${{ secrets.CONOHA_USERNAME }}
-          port: ${{ secrets.CONOHA_PORT }}
-          key: ${{ secrets.CONOHA_FINGERPRINT }}
-          source: "dist/index.html, dist/favicon.png, dist/yourcat-main-visual.png, dist/js/*"
-          target: "public_html/mirumi.me/apps/yourcat/"
-          rm: true
+        run: |
+          ssh -i ${{ secrets.CONOHA_FINGERPRINT }} ${{ secrets.CONOHA_USERNAME }}@${{ secrets.CONOHA_HOST }} -p ${{ secrets.CONOHA_PORT }} rm -r public_html/mirumi.me/apps/yourcat/*
+          scp -r -i ${{ secrets.CONOHA_FINGERPRINT }} -P ${{ secrets.CONOHA_PORT }} dist/* ${{ secrets.CONOHA_USERNAME }}@${{ secrets.CONOHA_HOST }}:publ
+ic_html/mirumi.me/apps/yourcat/
