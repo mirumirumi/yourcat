@@ -21,6 +21,7 @@
             border-radius: 13px 13px 13px 0px;
             transform: scale(0);
             transition: all 0.05s cubic-bezier(0.69, 1.1, 0.54, 1.17) 0.13s, opacity 0.3s ease-in-out;
+            cursor: default;
             opacity: 1;
             z-index: 1;
           " id="complete-submit">
