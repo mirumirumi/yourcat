@@ -1,11 +1,4 @@
-// "@vue/cli-plugin-eslint": "~4.5.0",
-// "@vue/eslint-config-prettier": "^6.0.0",
-// "babel-eslint": "^10.1.0",
-// "eslint": "^6.7.2",
-// "eslint-plugin-prettier": "^3.3.1",
-// "eslint-plugin-vue": "^7.0.0",
-
-import {createRouter, createWebHashHistory} from "vue-router";
+import {createRouter, createWebHistory} from "vue-router";
 import Home from "../views/Home.vue";
 import Terms from "../views/Terms.vue";
 import Privacy from "../views/Privacy.vue";
@@ -38,9 +31,9 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
-  routes,
-});
+  history: createWebHistory(process.env.BASE_URL),
+  routes
+})
 
 router.afterEach((to, from) => {
   document.title = to.meta.title;
