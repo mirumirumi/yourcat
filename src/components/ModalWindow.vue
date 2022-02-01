@@ -614,5 +614,3 @@ div#preview-wrap {
   }
 }
 </style>
-
-
