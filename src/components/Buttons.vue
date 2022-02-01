@@ -92,5 +92,3 @@ export default {
   }
 }
 </style>
-
-

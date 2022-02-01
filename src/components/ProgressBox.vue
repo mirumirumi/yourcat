@@ -208,5 +208,4 @@ div.progress {
     stroke-dashoffset: 0;
   }
 }
-
 </style>
