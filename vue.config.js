@@ -7,6 +7,6 @@ module.exports = {
     },
   },
   publicPath: process.env.NODE_ENV === "prd"
-    ? "https://mirumi.me/apps/yourcat/"
+    ? "/apps/yourcat/"
     : "/",
 };
