@@ -73,6 +73,8 @@ export default {
 .upload {
   display: inline-flex;
   align-items: center;
+  margin-top: 0;
+  margin-bottom: 0;
   color: #ffffff;
   background-color: $primary_color;
   &:hover {
