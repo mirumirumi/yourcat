@@ -1,9 +1,9 @@
-name: dev
+name: deploy
 
 on:
   push:
     branches:
-      - release/prd  # プルリクのマージもPushになる
+      - release/prd
 
 jobs:
   deploy:
