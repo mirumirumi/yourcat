@@ -170,14 +170,14 @@ function makeS3Url(fileId) {
 
 function makeFileName(fileId) {
   const [, piece] = /([0-9a-f]{8})-.*?$/gmi.exec(fileId);
-  return "YourCat_Photo_" + piece;
+  return "PhotoCat_Photo_" + piece;
 }
 
 async function execDownload(url) {
   const a = document.createElement("a");
   document.body.appendChild(a);
   const [, piece, ext] = /.*\/([0-9a-f]{8})-.*?(\..*)$/gmi.exec(url);
-  a.download = "YourCat_Photo_" + piece + ext;
+  a.download = "PhotoCat_Photo_" + piece + ext;
   const img = document.createElement("img");
   img.src = url;
   img.crossOrigin = "Anonymous";

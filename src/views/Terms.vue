@@ -7,7 +7,7 @@
       </svg>
     </div>
     <text-content>
-These Terms of Use set forth the terms of use for the services provided by YourCat (the "Services"). All users (hereinafter referred to as "Users"), regardless of whether they use the posting function or not, are required to use the Service in accordance with these Terms of Use.
+These Terms of Use set forth the terms of use for the services provided by PhotoCat (the "Services"). All users (hereinafter referred to as "Users"), regardless of whether they use the posting function or not, are required to use the Service in accordance with these Terms of Use.
 
 <h3>Article 1 (Application)</h3>
 These Terms of Use shall apply to all relationships between Users and the use of the Service.

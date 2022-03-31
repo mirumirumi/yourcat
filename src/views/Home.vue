@@ -1,7 +1,7 @@
 <template>
   <section id="description">
     <div class="title">
-      <h2>Publish YourCat</h2>
+      <h2>Publish Your Cat!</h2>
     </div>
     <div class="content">
       <p>Post a photo of your best cat.</p>

@@ -8,19 +8,19 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
-    meta: {title: "YourCat | Photo Sharing for All Cat Persons"},
+    meta: {title: "PhotoCat | Photo Sharing for All Cat Persons"},
   },
   {
     path: "/terms",
     name: "Terms",
     component: Terms,
-    meta: {title: "Terms | YourCat"},
+    meta: {title: "Terms | PhotoCat"},
   },
   {
     path: "/privacy",
     name: "Privacy",
     component: Privacy,
-    meta: {title: "Privacy | YourCat"},
+    meta: {title: "Privacy | PhotoCat"},
   },
   {
     path: "/:catchAll(.*)",
