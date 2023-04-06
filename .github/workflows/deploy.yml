@@ -3,7 +3,7 @@ name: deploy
 on:
   push:
     branches:
-      - release/prd
+      - never/trigggggggggerd
 
 jobs:
   deploy:
@@ -13,24 +13,3 @@ jobs:
       - uses: actions/setup-node@v2.4.1
       - run: npm install
       - run: npm run build-prd
-      
-#       - name: prd deploy
-#         uses: appleboy/scp-action@master
-#         with:
-#           host: ${{ secrets.CONOHA_HOST }}
-#           username: ${{ secrets.CONOHA_USERNAME }}
-#           port: ${{ secrets.CONOHA_PORT }}
-#           key: ${{ secrets.CONOHA_FINGERPRINT }}
-#           source: "dist/index.html, dist/favicon.png, dist/yourcat-main-visual.png, dist/js/*"
-#           target: "public_html/mirumi.me/apps/yourcat/"
-#           rm: true
-
-      - name: prd deploy
-        run: |
-          touch key.pem
-          echo ${{ secrets.CONOHA_PRIVATE_KEY }} > ./key.pem
-          sed -i -E -z 's/###/\n/g' ./key.pem
-          chmod 600 ./key.pem
-          ssh -oStrictHostKeyChecking=no -i ./key.pem ${{ secrets.CONOHA_USERNAME }}@${{ secrets.CONOHA_HOST }} -p ${{ secrets.CONOHA_PORT }} rm -r public_html/mirumi.me/apps/yourcat/*
-          ls -lha dist/
-          scp -r -i ./key.pem -P ${{ secrets.CONOHA_PORT }} dist/* ${{ secrets.CONOHA_USERNAME }}@${{ secrets.CONOHA_HOST }}:public_html/mirumi.me/apps/yourcat/

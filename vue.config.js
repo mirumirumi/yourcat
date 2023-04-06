@@ -6,7 +6,7 @@ module.exports = {
       },
     },
   },
-  publicPath: process.env.NODE_ENV === "prd"
+  publicPath: process.env.NODE_ENV === "production"
     ? "/apps/yourcat/"
     : "/",
 };
