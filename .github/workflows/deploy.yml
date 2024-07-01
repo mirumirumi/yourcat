@@ -3,13 +3,35 @@ name: deploy
 on:
   push:
     branches:
-      - never/trigggggggggerd
+      - release/prd
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+    
       - uses: actions/setup-node@v2.4.1
-      - run: npm install
-      - run: npm run build-prd
+        with:
+          node-version: "14"
+
+      - name: Installing npm modules...
+        run: npm install
+
+      # - name: Decrypting secrets with gpg...
+      #   run: |
+      #     echo "${{ secrets.GPG_PASSPHRASE }}" | sudo gpg --batch --passphrase-fd 0 --output ".env.prd" --decrypt ".env.prd.gpg" 
+
+      - name: Building...
+        run: npm run build-prd
+
+      - name: Deploying...
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.CONOHA_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+          ssh -oStrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.CONOHA_USERNAME }}@${{ secrets.CONOHA_HOST }} -p ${{ secrets.CONOHA_PORT }} rm -rf public_html/mirumi.in/apps/yourcat/*
+          ls -lha dist/
+          scp -r -i ~/.ssh/id_rsa -P ${{ secrets.CONOHA_PORT }} dist/* ${{ secrets.CONOHA_USERNAME }}@${{ secrets.CONOHA_HOST }}:public_html/mirumi.in/apps/yourcat/
